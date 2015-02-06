@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="model.cpp" />
+    <ClCompile Include="robot.cpp" />
+    <ClCompile Include="skeleton.cpp" />
+    <ClCompile Include="quatn.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="vector3d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="boundsAABB.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="animator.cpp" />
+    <ClCompile Include="Matrix4d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIUtils.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="model.h" />
+    <ClInclude Include="skeleton.h" />
+    <ClInclude Include="quatn.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3d.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="bounds.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="boundsAABB.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="includes.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="animator.h" />
+    <ClInclude Include="QuickArray.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4d.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIUtils.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{77054473-364f-44ea-94f1-367f1edca7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controllers">
+      <UniqueIdentifier>{f871b09d-84a1-4c70-978b-d894155749e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{73a9328b-7b32-43ab-8cb6-7be3d73a3707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IK">
+      <UniqueIdentifier>{fdd3776d-c370-490d-85bf-668f4be93cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{7f25ecca-05d9-4407-b5c3-0e49c0f15903}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
