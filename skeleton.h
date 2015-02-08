@@ -16,6 +16,7 @@ public:
 
 	//float length;
 	vector3d startpt, endpt;
+	vector3d axis;
 	QuickArray<pair<vector3d*,float>> vertices;
 
 	quatn rot;
@@ -29,6 +30,7 @@ public:
 	void rotate(vector3d& v, vector3d& center,Matrix4d& rots,float weight);
 	void rotate(vector3d& v, vector3d& center,Matrix4d& rots);
 	skeleton(void);
+	skeleton(vector3d&);
 	~skeleton(void);
 };
 

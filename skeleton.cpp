@@ -7,6 +7,16 @@ skeleton::skeleton()
 	child_no=0;
 	vertices.alloc(5000);
 	bb=0;
+	axis = vector3d(0, 0, 1);
+}
+
+skeleton::skeleton(vector3d& _axis)
+{
+	child = 0;
+	child_no = 0;
+	vertices.alloc(5000);
+	bb = 0;
+	axis = _axis;
 }
 
 void skeleton::setAABB(boundsAABB* bbb){
