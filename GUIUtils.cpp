@@ -37,11 +37,14 @@ vector3d GUIUtils::projectToCameraPlane(vector3d& p, float offset)
 //render after everything else
 void GUIUtils::renderCursor()
 {
-	cursorPos = get3DFrom2D(mouseX, mouseY);
-	vector3d ppp = sceneRot.conjugate() * cursorPos - cameraPos;
-	cursorPos = projectToCameraPlane(ppp, 20);
-	cursorPos = sceneRot * (cursorPos + cameraPos);
-
+	if (!rightMouseDown && mouseDown)
+	{
+	
+		cursorPos = get3DFrom2D(mouseX, mouseY);
+		vector3d ppp = sceneRot.conjugate() * cursorPos - cameraPos;
+		cursorPos = projectToCameraPlane(ppp, 20);
+		cursorPos = sceneRot * (cursorPos + cameraPos);
+	}
 	//printf("%f %f %f\n", ppp.x, ppp.y, ppp.z);
 	printf("%f %f %f\n", cursorPos.x, cursorPos.y, cursorPos.z);
 

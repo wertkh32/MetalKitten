@@ -32,8 +32,11 @@ void skeleton::rotateAllVertices(vector3d& centre,Matrix4d& rotation){
 	rotate(startpt, centre, rotation,1);
 	
 	for(int i=0;i<vertices.size();i++)
-		if(LINEAR_BLEND)rotate(*vertices[i].first, centre, rotation,vertices[i].second);
-		else rotate(*vertices[i].first, centre, rotation);
+		#ifdef LINEAR_BLEND
+				rotate(*vertices[i].first, centre, rotation,vertices[i].second);
+		#else 
+				rotate(*vertices[i].first, centre, rotation);
+		#endif
 }
 
 void skeleton::rotateAllVertices(){
@@ -43,8 +46,11 @@ void skeleton::rotateAllVertices(){
 
 
 	for(int i=0;i<vertices.size();i++)
-		if(LINEAR_BLEND)rotate(*vertices[i].first,startpt,mrot,vertices[i].second);
-		else rotate(*vertices[i].first, startpt,mrot);
+		#ifdef LINEAR_BLEND
+				rotate(*vertices[i].first,startpt,mrot,vertices[i].second);
+		#else 
+				rotate(*vertices[i].first, startpt,mrot);
+		#endif
 
 }
 

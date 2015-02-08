@@ -18,6 +18,12 @@ QuickArray()
 	sz=0;
 }
 
+QuickArray(T* arr)
+{
+	varr = arr;
+	sz = 0;
+}
+
 void alloc(int n){
 	varr=new T[n];
 	sz=0;

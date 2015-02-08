@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="animator.cpp" />
     <ClCompile Include="boundsAABB.cpp" />
+    <ClCompile Include="ConjugateGradientSolver.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="IKSolver.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
@@ -27,6 +28,8 @@
     <ClInclude Include="animator.h" />
     <ClInclude Include="bounds.h" />
     <ClInclude Include="boundsAABB.h" />
+    <ClInclude Include="ConjugateGradientSolver.h" />
+    <ClInclude Include="ConstrainedRows.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="GenMatrix.h" />
