@@ -29,6 +29,7 @@ public:
 
 	void reloadmodel();
 	void addrotation(skeleton* part, float x_angle, float y_angle, float z_angle);
+	void addrotation(skeleton* part, quatn& q);
 	void draw();
 };
 

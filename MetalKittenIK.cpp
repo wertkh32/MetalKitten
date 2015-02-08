@@ -1,7 +1,9 @@
 #include <stdlib.h>
-#include <GL/glut.h>
+#include "GL/glut.h"
 #include "model.h"
 #include "animator.h"
+
+#include "GUIUtils.h"
 
 static int shoulder = 0, elbow = 0;
 model* m;
@@ -92,35 +94,17 @@ void display(void)
   
    glPushMatrix();
    
-   
+		   vector3d campos = -gui.getCameraPos();
+		   glTranslatef(campos.x,campos.y,campos.z);
+		   glMultMatrixf((gui.getSceneRotation().toRotMatrix()).arr);
 
-   glTranslatef(0,0,-20);
-   glRotatef(gui.getSceneRotation().x,0,1,0);
-
-
-   if(start){
-   if(!ani_head->animate())ani_head->reverse();
-
-   if(!ani_lfarm->animate())ani_lfarm->reverse();
-   if(!ani_rfarm->animate())ani_rfarm->reverse();
-
-   if(!ani_larm->animate())ani_larm->reverse();
-   if(!ani_rarm->animate())ani_rarm->reverse();
-
-    if(!ani_lcalf->animate())ani_lcalf->reverse();
-   if(!ani_rcalf->animate())ani_rcalf->reverse();
-
-   if(!ani_lleg->animate())ani_lleg->reverse();
-   if(!ani_rleg->animate())ani_rleg->reverse();
-   }
-
-   glColor3f(1,0,0);
-   m->draw();
-   drawfloor();
-   
+		   glColor3f(1,0,0);
+		   m->draw();
+		   drawfloor();
+		   gui.renderCursor();
    glPopMatrix();
 
-   gui.renderCursor();
+ 
 
    glFlush ();
    glutSwapBuffers();
@@ -139,6 +123,8 @@ void reshape (int w, int h)
 
 void keyboard (unsigned char key, int x, int y)
 {
+   gui.onKeyPress(key, x, y);
+   
    switch (key) {
       case 'm':
          start=true;
@@ -165,9 +151,6 @@ void mouseFunc(int button, int state, int x, int y)
 
 void mouseMoveFunc(int x, int y)
 {
-	//printf("%d %d\n",x, y);
-	//vector3d v = GUIUtils::get3DFrom2D(x, y);
-	//printf("%f %f %f", v.x, v.y, v.z);
 	gui.onMouseMove(x, y);
 }
 

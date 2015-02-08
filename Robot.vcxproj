@@ -14,10 +14,11 @@
     <ClCompile Include="animator.cpp" />
     <ClCompile Include="boundsAABB.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="IKSolver.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="quatn.cpp" />
-    <ClCompile Include="robot.cpp" />
+    <ClCompile Include="MetalKittenIK.cpp" />
     <ClCompile Include="skeleton.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
     <ClCompile Include="vector3d.cpp" />
@@ -28,7 +29,9 @@
     <ClInclude Include="boundsAABB.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="defines.h" />
+    <ClInclude Include="GenMatrix.h" />
     <ClInclude Include="GUIUtils.h" />
+    <ClInclude Include="IKSolver.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="Matrix4d.h" />
     <ClInclude Include="model.h" />
@@ -94,7 +97,7 @@
       <ObjectFileName>.\Debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <AdditionalIncludeDirectories>C:\Users\ksing\Downloads\linear_blend_experiment\includes;..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\includes;..</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <TypeLibraryName>.\Debug\Solar.tlb</TypeLibraryName>

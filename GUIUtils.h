@@ -5,11 +5,16 @@
 class GUIUtils
 {
 	vector3d cursorPos;
-	vector3d sceneRot;
+	quatn sceneRot;
+	vector3d cameraPos;
+	
 	bool mouseDown;
 	bool rightMouseDown;
+	bool shiftDown;
 	int mouseX, mouseY;
 	int pmouseX, pmouseY;
+
+	vector3d lookAt;
 
 	inline
 	void updateMouse(int x, int y)
@@ -20,18 +25,22 @@ class GUIUtils
 		mouseY = y;
 	}
 
+	vector3d projectToCameraPlane(vector3d& p, float offset);
+
 
 public:
-	GUIUtils() :mouseDown(false), rightMouseDown(false)
+	GUIUtils() :mouseDown(false), rightMouseDown(false),shiftDown(false), cameraPos(0.0, 0.0, 20.0), lookAt(0,0,-1)
 	{
 
 	}
 
 	void onMouseClick(int button, int state, int x, int y);
 	void onMouseMove(int x, int y);
+	void onKeyPress(unsigned char key, int x, int y);
 	void renderCursor();
 
-	inline vector3d& getSceneRotation(){ return sceneRot; }
+	inline quatn& getSceneRotation(){ return sceneRot; }
+	inline vector3d& getCameraPos(){ return cameraPos; }
 	inline vector3d& getCursorPos(){ return cursorPos; }
 
 

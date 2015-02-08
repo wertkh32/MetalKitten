@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="model.cpp" />
-    <ClCompile Include="robot.cpp" />
     <ClCompile Include="skeleton.cpp" />
     <ClCompile Include="quatn.cpp">
       <Filter>Math</Filter>
@@ -22,6 +21,10 @@
     </ClCompile>
     <ClCompile Include="GUIUtils.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalKittenIK.cpp" />
+    <ClCompile Include="IKSolver.cpp">
+      <Filter>IK</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +60,12 @@
     </ClInclude>
     <ClInclude Include="GUIUtils.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GenMatrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="IKSolver.h">
+      <Filter>IK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

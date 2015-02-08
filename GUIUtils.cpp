@@ -27,11 +27,23 @@ vector3d  GUIUtils::get3DFrom2D(float x, float y)
 
 }
 
+vector3d GUIUtils::projectToCameraPlane(vector3d& p, float offset)
+{
+	vector3d dir = p.unit();
+	float t = (offset - lookAt.dot(dir));
+	return dir * t;
+}
+
 //render after everything else
 void GUIUtils::renderCursor()
 {
-	//if(mouseDown)printf("%f %f %f\n", cursorPos.x, cursorPos.y, cursorPos.z);
 	cursorPos = get3DFrom2D(mouseX, mouseY);
+	vector3d ppp = sceneRot.conjugate() * cursorPos - cameraPos;
+	cursorPos = projectToCameraPlane(ppp, 20);
+	cursorPos = sceneRot * (cursorPos + cameraPos);
+
+	//printf("%f %f %f\n", ppp.x, ppp.y, ppp.z);
+	printf("%f %f %f\n", cursorPos.x, cursorPos.y, cursorPos.z);
 
 	glPushMatrix();
 	glTranslatef(cursorPos.x, cursorPos.y, cursorPos.z);
@@ -56,6 +68,11 @@ void GUIUtils::onMouseMove(int x, int y)
 	{
 		updateMouse(x, y);
 		int sgn = (mouseX - pmouseX) < 0 ? -1 : 1;
-		sceneRot.x += sgn;
+		sceneRot *= quatn(vector3d(0, 1, 0), sgn);
 	}
+}
+
+void GUIUtils::onKeyPress(unsigned char key, int x, int y)
+{
+
 }

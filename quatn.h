@@ -23,6 +23,7 @@ public:
 	quatn operator+(quatn& q);//add
 	quatn operator-(quatn& q);//subtract 
 	quatn operator*(quatn& q);//multiply
+	vector3d operator*(vector3d& vec);//multiply vec
 	quatn operator*(float k);//multiply
 	quatn& operator*=(quatn& q);//multiply(=)
 
@@ -81,6 +82,13 @@ quatn& quatn::operator*=(quatn& q){
 inline
 quatn quatn::lerp(quatn& dest, float t){
 return ((*this)*(1-t) + dest*t).unit();
+}
+
+inline
+vector3d quatn::operator*(vector3d& vec)
+{
+	vector3d t = v.cross(vec) * 2;
+	return vec + t * s + v.cross(t);
 }
 
 /*

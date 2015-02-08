@@ -143,6 +143,11 @@ part->rot= quatn(x_angle,y_angle,z_angle);
 part->rotateAllVertices();
 }
 
+void model::addrotation(skeleton* part, quatn& q){
+	part->rot = q;
+	part->rotateAllVertices();
+}
+
 void model::draw(){
 
 glPushMatrix();
