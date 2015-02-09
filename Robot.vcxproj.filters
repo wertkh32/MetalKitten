@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="skeleton.cpp" />
     <ClCompile Include="quatn.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -15,12 +13,11 @@
     <ClCompile Include="Controller.cpp">
       <Filter>Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="animator.cpp" />
     <ClCompile Include="Matrix4d.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="GUIUtils.cpp">
-      <Filter>GUI</Filter>
+      <Filter>IK\GUI</Filter>
     </ClCompile>
     <ClCompile Include="MetalKittenIK.cpp" />
     <ClCompile Include="IKSolver.cpp">
@@ -29,10 +26,22 @@
     <ClCompile Include="ConjugateGradientSolver.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="skeleton.cpp">
+      <Filter>unused</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>unused</Filter>
+    </ClCompile>
+    <ClCompile Include="bone.cpp">
+      <Filter>IK\bones</Filter>
+    </ClCompile>
+    <ClCompile Include="animator.cpp">
+      <Filter>unused</Filter>
+    </ClCompile>
+    <ClCompile Include="HingeJointBone.cpp" />
+    <ClCompile Include="BallJointBone.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model.h" />
-    <ClInclude Include="skeleton.h" />
     <ClInclude Include="quatn.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -54,7 +63,6 @@
     <ClInclude Include="includes.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="animator.h" />
     <ClInclude Include="QuickArray.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -62,7 +70,7 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="GUIUtils.h">
-      <Filter>GUI</Filter>
+      <Filter>IK\GUI</Filter>
     </ClInclude>
     <ClInclude Include="GenMatrix.h">
       <Filter>Math</Filter>
@@ -76,6 +84,20 @@
     <ClInclude Include="ConstrainedRows.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="skeleton.h">
+      <Filter>unused</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>unused</Filter>
+    </ClInclude>
+    <ClInclude Include="bone.h">
+      <Filter>IK\bones</Filter>
+    </ClInclude>
+    <ClInclude Include="animator.h">
+      <Filter>unused</Filter>
+    </ClInclude>
+    <ClInclude Include="HingeJointBone.h" />
+    <ClInclude Include="BallJointBone.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -90,8 +112,14 @@
     <Filter Include="IK">
       <UniqueIdentifier>{fdd3776d-c370-490d-85bf-668f4be93cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI">
+    <Filter Include="unused">
+      <UniqueIdentifier>{c424e5b4-1baa-4747-b49b-a2fc230db938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IK\GUI">
       <UniqueIdentifier>{7f25ecca-05d9-4407-b5c3-0e49c0f15903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IK\bones">
+      <UniqueIdentifier>{0cd398a9-79a6-4338-942c-eff73ae0bc0b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

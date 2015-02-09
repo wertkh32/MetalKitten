@@ -13,7 +13,7 @@ class ConjugateGradientSolver
 	float *r, *x, *d, *q, *tempo;
 	float *flatA;
 	float** A;
-	int n, nb;
+	int n;
 
 public:
 	ConjugateGradientSolver();

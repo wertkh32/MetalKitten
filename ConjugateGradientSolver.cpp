@@ -11,7 +11,6 @@ ConjugateGradientSolver::initSolver(int _n, float** _A)
 {
 	n = _n;
 	A = _A;
-	nb = n/3;
 
 	r = (float*)malloc(sizeof(float) * n); 
 	d = (float*)malloc(sizeof(float) * n); 
