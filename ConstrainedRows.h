@@ -9,23 +9,14 @@ enum DOF
 
 struct ConstrainedRows
 {
-	int arr[MAX_ROWS_CONSTRAINED];
-	QuickArray<int> list;
-	ConstrainedRows() :list(arr)
+	QuickArray<int, MAX_ROWS_CONSTRAINED> list;
+	ConstrainedRows()
 	{
 	}
 	
-	void add(int node, DOF dof)
+	void add(int row)
 	{
-		list.push(node * 3 + dof);
+		list.push(row);
 	}
-	
-	void add(int node)
-	{
-		list.push(node * 3);
-		list.push(node * 3 + 1);
-		list.push(node * 3 + 2);
-	}
-
 
 };

@@ -55,6 +55,22 @@ Matrix4d quatn::toRotMatrix(){
 			0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+Matrix3d quatn::toRotMatrix3d(){
+	float x2 = v.x * v.x;
+	float y2 = v.y * v.y;
+	float z2 = v.z * v.z;
+	float xy = v.x * v.y;
+	float xz = v.x * v.z;
+	float yz = v.y * v.z;
+	float wx = s * v.x;
+	float wy = s * v.y;
+	float wz = s * v.z;
+
+	return Matrix3d(1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz), 2.0f * (xz + wy),
+		2.0f * (xy + wz), 1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 
+		2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (x2 + y2));
+}
+
 quatn::~quatn(void)
 {
 }

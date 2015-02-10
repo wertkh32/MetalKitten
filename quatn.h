@@ -1,6 +1,7 @@
 #pragma once
 #include "vector3d.h"
 #include "Matrix4d.h"
+#include "Matrix3d.h"
 
 class quatn
 {
@@ -29,6 +30,7 @@ public:
 
 	quatn lerp(quatn& end, float t);
 	Matrix4d toRotMatrix();
+	Matrix3d toRotMatrix3d();
 	~quatn(void);
 };
 

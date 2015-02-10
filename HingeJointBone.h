@@ -7,8 +7,10 @@ class HingeJointBone :
 	float angle;
 public:
 	void rotate(float angle);
+	vector3d getJacobianRow(vector3d& endeffector);
+	void render();
 
-	HingeJointBone(void);
+	HingeJointBone(vector3d& _pos, vector3d& _endpos, vector3d& _axis) : bone(_pos, _endpos), axis(_axis){};
 	~HingeJointBone(void);
 };
 

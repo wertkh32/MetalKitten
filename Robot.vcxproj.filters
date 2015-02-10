@@ -26,20 +26,21 @@
     <ClCompile Include="ConjugateGradientSolver.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="skeleton.cpp">
-      <Filter>unused</Filter>
-    </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>unused</Filter>
-    </ClCompile>
     <ClCompile Include="bone.cpp">
       <Filter>IK\bones</Filter>
     </ClCompile>
-    <ClCompile Include="animator.cpp">
-      <Filter>unused</Filter>
+    <ClCompile Include="Matrix3d.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="HingeJointBone.cpp" />
-    <ClCompile Include="BallJointBone.cpp" />
+    <ClCompile Include="BallJointBone.cpp">
+      <Filter>IK\bones</Filter>
+    </ClCompile>
+    <ClCompile Include="HingeJointBone.cpp">
+      <Filter>IK\bones</Filter>
+    </ClCompile>
+    <ClCompile Include="ArticulatedBody.cpp">
+      <Filter>IK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -84,20 +85,24 @@
     <ClInclude Include="ConstrainedRows.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="skeleton.h">
-      <Filter>unused</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>unused</Filter>
-    </ClInclude>
     <ClInclude Include="bone.h">
       <Filter>IK\bones</Filter>
     </ClInclude>
-    <ClInclude Include="animator.h">
-      <Filter>unused</Filter>
+    <ClInclude Include="Matrix3d.h">
+      <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="HingeJointBone.h" />
-    <ClInclude Include="BallJointBone.h" />
+    <ClInclude Include="BallJointBone.h">
+      <Filter>IK\bones</Filter>
+    </ClInclude>
+    <ClInclude Include="HingeJointBone.h">
+      <Filter>IK\bones</Filter>
+    </ClInclude>
+    <ClInclude Include="ArticulatedBody.h">
+      <Filter>IK</Filter>
+    </ClInclude>
+    <ClInclude Include="ArticulatedDefines.h">
+      <Filter>IK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

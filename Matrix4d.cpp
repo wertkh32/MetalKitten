@@ -80,11 +80,13 @@ Matrix4d Matrix4d::operator*(Matrix4d& mm){
 }
 
 vector3d Matrix4d::operator*(vector3d& vv){
-	float v[3]={0};
-	for(int i=0;i<3;i++)
-		for(int j=0;j<3;j++)
-			v[i]+=mat[i][j] * vv.coords[j];
-	return vector3d(v);
+	//assume vv is a homogenous coordinate
+	float in[4] = { vv.x, vv.y, vv.z, 1 };
+	float out[4] = { 0 };
+	for(int i=0;i<4;i++)
+		for(int j=0;j<4;j++)
+			out[i]+=mat[i][j] * in[j];
+	return vector3d(out);
 }
 
 Matrix4d Matrix4d::operator+(Matrix4d& mm){

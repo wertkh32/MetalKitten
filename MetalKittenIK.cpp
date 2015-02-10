@@ -1,19 +1,18 @@
 #include <stdlib.h>
 #include "GL/glut.h"
-#include "model.h"
-#include "animator.h"
+
+#include "BallJointBone.h"
+#include "HingeJointBone.h"
 
 #include "GUIUtils.h"
 
 static int shoulder = 0, elbow = 0;
-model* m;
-animator *ani_larm, *ani_lfarm, 
-	     *ani_rarm, *ani_rfarm,
-		 *ani_head,
-		 *ani_lleg, *ani_lcalf,
-		 *ani_rleg, *ani_rcalf;
 GUIUtils gui;
 bool start=false;
+
+BallJointBone bone1(vector3d(0,0,0),vector3d(0,3,0));
+HingeJointBone bone2(vector3d(0, 3, 0), vector3d(0, 6, 0),vector3d(1,0,0));
+BallJointBone bone3(vector3d(0, 6, 0), vector3d(0, 10, 0));
 
 void lettherebelight(){
 
@@ -52,7 +51,7 @@ const GLfloat high_emission[] = { 0.3f,0.3f,0.7f,1.0f };
 
 void init(void) 
 {
-   glClearColor (0.0, 0.0, 0.0, 0.0);
+   glClearColor (1.0, 1.0, 1.0, 1.0);
    glShadeModel (GL_FLAT);
 
     glEnable(GL_CULL_FACE);
@@ -99,7 +98,10 @@ void display(void)
 		   glMultMatrixf((gui.getSceneRotation().toRotMatrix()).arr);
 
 		   glColor3f(1,0,0);
-		   m->draw();
+		   bone1.render();
+		   bone2.render();
+		   bone3.render();
+
 		   drawfloor();
 		   gui.renderCursor();
    glPopMatrix();
@@ -156,7 +158,11 @@ void mouseMoveFunc(int x, int y)
 
 int main(int argc, char** argv)
 {
-	m=new model("DUDE.raw");
+	bone1.addChild(&bone2);
+	bone2.addChild(&bone3);
+	bone1.rotate(vector3d(0,0,45));
+	bone2.rotate(90);
+	bone3.rotate(vector3d(0, 90, 0));
 
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="animator.cpp" />
+    <ClCompile Include="ArticulatedBody.cpp" />
     <ClCompile Include="BallJointBone.cpp" />
     <ClCompile Include="bone.cpp" />
     <ClCompile Include="boundsAABB.cpp" />
@@ -19,16 +19,16 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="HingeJointBone.cpp" />
     <ClCompile Include="IKSolver.cpp" />
+    <ClCompile Include="Matrix3d.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
-    <ClCompile Include="model.cpp" />
     <ClCompile Include="quatn.cpp" />
     <ClCompile Include="MetalKittenIK.cpp" />
-    <ClCompile Include="skeleton.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
     <ClCompile Include="vector3d.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animator.h" />
+    <ClInclude Include="ArticulatedBody.h" />
+    <ClInclude Include="ArticulatedDefines.h" />
     <ClInclude Include="BallJointBone.h" />
     <ClInclude Include="bone.h" />
     <ClInclude Include="bounds.h" />
@@ -42,10 +42,9 @@
     <ClInclude Include="HingeJointBone.h" />
     <ClInclude Include="IKSolver.h" />
     <ClInclude Include="includes.h" />
+    <ClInclude Include="Matrix3d.h" />
     <ClInclude Include="Matrix4d.h" />
-    <ClInclude Include="model.h" />
     <ClInclude Include="quatn.h" />
-    <ClInclude Include="skeleton.h" />
     <ClInclude Include="vector3d.h" />
     <ClInclude Include="QuickArray.h" />
   </ItemGroup>
@@ -66,7 +65,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

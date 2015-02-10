@@ -1,51 +1,50 @@
 #pragma once
-template<class T> class QuickArray
+template<class T, int N> 
+class QuickArray
 {
 
-int sz;
-T* varr;
+	int sz;
+	T varr[N];
 public:
 
-QuickArray(int n)
-{
-	varr=new T[n];
-	sz=0;
-}
+	QuickArray()
+	{
+		//for(int i=0;i<N;i++)
+		//	varr[i]=0;
+		sz=0;
+	}
 
-QuickArray()
-{
-	varr=0;
-	sz=0;
-}
+	inline
+		T& operator[](int i){
+			return varr[i];
+	}
 
-QuickArray(T* arr)
-{
-	varr = arr;
-	sz = 0;
-}
+	inline
+		void push(T v){
+			varr[sz++]=v;
+	}
 
-void alloc(int n){
-	varr=new T[n];
-	sz=0;
-}
+	inline
+		T pop()
+	{
+		if(sz > 0)
+			return varr[--sz];
+		else
+			return 0;
+	}
 
-T& operator[](int i){
-return varr[i];
-}
+	inline
+		void reset(){
+			sz=0;
+	}
 
-void QuickArray<T>::push(T v){
-	varr[sz++]=v;
-}
+	inline int size(){
+		return sz;
+	}
 
-inline int size(){
-return sz;
-}
-
-~QuickArray(void)
-{
-	delete[] varr;
-	delete varr;
-}
+	~QuickArray(void)
+	{
+	}
 
 };
 
