@@ -16,7 +16,7 @@ protected:
 
 	void	  rotateChild(quatn& q, vector3d& parentpos);
 public:
-	bone(vector3d& _pos, vector3d& _endpos):position(_pos),endposition(_endpos){}
+	bone(vector3d& _pos, vector3d& _endpos):position(_pos),endposition(_endpos),no_children(0){}
 
 	void addChild(bone* _bone);
 	vector3d& getPosition(){return position;}

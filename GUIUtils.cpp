@@ -46,7 +46,7 @@ void GUIUtils::renderCursor()
 		cursorPos = sceneRot * (cursorPos + cameraPos);
 	}
 	//printf("%f %f %f\n", ppp.x, ppp.y, ppp.z);
-	printf("%f %f %f\n", cursorPos.x, cursorPos.y, cursorPos.z);
+	//printf("%f %f %f\n", cursorPos.x, cursorPos.y, cursorPos.z);
 
 	glPushMatrix();
 	glTranslatef(cursorPos.x, cursorPos.y, cursorPos.z);

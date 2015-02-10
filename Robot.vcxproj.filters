@@ -39,7 +39,10 @@
       <Filter>IK\bones</Filter>
     </ClCompile>
     <ClCompile Include="ArticulatedBody.cpp">
-      <Filter>IK</Filter>
+      <Filter>IK\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="Chain.cpp">
+      <Filter>IK\Bodies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,10 +101,13 @@
       <Filter>IK\bones</Filter>
     </ClInclude>
     <ClInclude Include="ArticulatedBody.h">
-      <Filter>IK</Filter>
+      <Filter>IK\Bodies</Filter>
     </ClInclude>
     <ClInclude Include="ArticulatedDefines.h">
-      <Filter>IK</Filter>
+      <Filter>IK\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="Chain.h">
+      <Filter>IK\Bodies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +131,9 @@
     </Filter>
     <Filter Include="IK\bones">
       <UniqueIdentifier>{0cd398a9-79a6-4338-942c-eff73ae0bc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IK\Bodies">
+      <UniqueIdentifier>{9d828537-4dbc-4bac-956e-ddbfc1ca50c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

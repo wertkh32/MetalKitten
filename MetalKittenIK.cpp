@@ -3,6 +3,8 @@
 
 #include "BallJointBone.h"
 #include "HingeJointBone.h"
+#include "IKSolver.h"
+#include "Chain.h"
 
 #include "GUIUtils.h"
 
@@ -10,9 +12,9 @@ static int shoulder = 0, elbow = 0;
 GUIUtils gui;
 bool start=false;
 
-BallJointBone bone1(vector3d(0,0,0),vector3d(0,3,0));
-HingeJointBone bone2(vector3d(0, 3, 0), vector3d(0, 6, 0),vector3d(1,0,0));
-BallJointBone bone3(vector3d(0, 6, 0), vector3d(0, 10, 0));
+vector3d arr[4] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0) };
+Chain chain(arr, 4);
+IKSolver solver(chain);
 
 void lettherebelight(){
 
@@ -98,9 +100,7 @@ void display(void)
 		   glMultMatrixf((gui.getSceneRotation().toRotMatrix()).arr);
 
 		   glColor3f(1,0,0);
-		   bone1.render();
-		   bone2.render();
-		   bone3.render();
+		   chain.render();
 
 		   drawfloor();
 		   gui.renderCursor();
@@ -130,6 +130,7 @@ void keyboard (unsigned char key, int x, int y)
    switch (key) {
       case 'm':
          start=true;
+		 solver.solveByJacobianInverse(gui.getCursorPos());
          break;
       case 27:
          exit(0);
@@ -158,11 +159,6 @@ void mouseMoveFunc(int x, int y)
 
 int main(int argc, char** argv)
 {
-	bone1.addChild(&bone2);
-	bone2.addChild(&bone3);
-	bone1.rotate(vector3d(0,0,45));
-	bone2.rotate(90);
-	bone3.rotate(vector3d(0, 90, 0));
 
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -170,9 +166,9 @@ int main(int argc, char** argv)
    glutInitWindowPosition (100, 100);
    glutCreateWindow (argv[0]);
    init ();
-
+   
    printf("Press M to start");
-
+   
    glutTimerFunc(1000/60, timer, 60);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape);

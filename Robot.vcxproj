@@ -15,6 +15,7 @@
     <ClCompile Include="BallJointBone.cpp" />
     <ClCompile Include="bone.cpp" />
     <ClCompile Include="boundsAABB.cpp" />
+    <ClCompile Include="Chain.cpp" />
     <ClCompile Include="ConjugateGradientSolver.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="HingeJointBone.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="bone.h" />
     <ClInclude Include="bounds.h" />
     <ClInclude Include="boundsAABB.h" />
+    <ClInclude Include="Chain.h" />
     <ClInclude Include="ConjugateGradientSolver.h" />
     <ClInclude Include="ConstrainedRows.h" />
     <ClInclude Include="Controller.h" />

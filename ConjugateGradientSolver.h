@@ -4,7 +4,7 @@
 #include "ConstrainedRows.h"
 
 #define MAX_ITER 20
-#define EPSILON 0.05
+#define EPSILON 0.01
 
 
 //use pure arrays
