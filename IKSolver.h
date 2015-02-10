@@ -2,6 +2,7 @@
 #include "ArticulatedBody.h"
 #include "ConjugateGradientSolver.h"
 #define EPSILON 0.01
+#define MAX_ITERATIONS 100
 
 class IKSolver
 {

@@ -17,8 +17,9 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 {
 
 	vector3d endeffector = artbody.getEndEffector();
+	int counter = 0;
 	//printf("HELLO");
-	while ((goal - endeffector).mag() > EPSILON)
+	while ((goal - endeffector).mag() > EPSILON && counter < MAX_ITERATIONS)
 	{
 		for (int i = 0; i < n; i++)
 		{
@@ -36,6 +37,12 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 				JTJ[i][j] += J(i, k) * J(j, k);
 		}
 
+		
+		#ifdef DAMPED_LEAST_SQUARES
+		for (int i = 0; i < n; i++)
+			JTJ[i][i] += 1;
+		#endif
+
 		vector3d s = goal - endeffector;
 		for (int i = 0; i < n;i++)
 			for (int j = 0; j < 3; j++)
@@ -49,6 +56,7 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 
 
 		endeffector = artbody.getEndEffector();
+		++counter;
 	}
 
 }
