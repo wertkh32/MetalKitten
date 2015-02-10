@@ -17,7 +17,7 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 {
 
 	vector3d endeffector = artbody.getEndEffector();
-	printf("HELLO");
+	//printf("HELLO");
 	while ((goal - endeffector).mag() > EPSILON)
 	{
 		for (int i = 0; i < n; i++)
@@ -44,8 +44,8 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 		solver.solve(d0, JTs);
 		artbody.solverRotate(d0);
 
-		for (int i = 0; i < n; i++)
-			printf("%f ", d0[i]);
+		//for (int i = 0; i < n; i++)
+		//	printf("%f ", d0[i]);
 
 
 		endeffector = artbody.getEndEffector();

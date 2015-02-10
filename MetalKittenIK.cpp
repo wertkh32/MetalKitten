@@ -12,8 +12,8 @@ static int shoulder = 0, elbow = 0;
 GUIUtils gui;
 bool start=false;
 
-vector3d arr[4] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0) };
-Chain chain(arr, 4);
+vector3d arr[5] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0), vector3d(0, 12, 0) };
+Chain chain(arr, 5);
 IKSolver solver(chain);
 
 void lettherebelight(){
@@ -100,6 +100,10 @@ void display(void)
 		   glMultMatrixf((gui.getSceneRotation().toRotMatrix()).arr);
 
 		   glColor3f(1,0,0);
+
+		   if (start)
+			   solver.solveByJacobianInverse(gui.getCursorPos());
+
 		   chain.render();
 
 		   drawfloor();
@@ -130,7 +134,7 @@ void keyboard (unsigned char key, int x, int y)
    switch (key) {
       case 'm':
          start=true;
-		 solver.solveByJacobianInverse(gui.getCursorPos());
+		
          break;
       case 27:
          exit(0);
