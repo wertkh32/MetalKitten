@@ -44,6 +44,9 @@
     <ClCompile Include="Chain.cpp">
       <Filter>IK\Bodies</Filter>
     </ClCompile>
+    <ClCompile Include="HingeChain.cpp">
+      <Filter>IK\Bodies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -107,6 +110,9 @@
       <Filter>IK\Bodies</Filter>
     </ClInclude>
     <ClInclude Include="Chain.h">
+      <Filter>IK\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="HingeChain.h">
       <Filter>IK\Bodies</Filter>
     </ClInclude>
   </ItemGroup>

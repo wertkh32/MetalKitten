@@ -15,35 +15,39 @@ IKSolver::IKSolver(ArticulatedBody& _artbody) :artbody(_artbody)
 
 void IKSolver::solveByJacobianInverse(vector3d& goal)
 {
-
 	vector3d endeffector = artbody.getEndEffector();
 	int counter = 0;
 	//printf("HELLO");
+	for (int i = 0; i < n; i++)
+		d0[i] = 0;
+
 	while ((goal - endeffector).mag() > EPSILON && counter < MAX_ITERATIONS)
 	{
 		for (int i = 0; i < n; i++)
-		{
-			d0[i] = 0;
 			JTs[i] = 0;
-		}
 
-		GenMatrix<float, MAX_BONES * 3, 3>& J = artbody.getJacobian();
+		GenMatrix<float, MAX_BONES * 3, 3>& J = artbody.getJacobian(goal);
 
 		for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-		{
-			JTJ[i][j] = 0;
-			for (int k = 0; k < 3; k++)
-				JTJ[i][j] += J(i, k) * J(j, k);
-		}
+			for (int j = 0; j < n; j++)
+			{
+				JTJ[i][j] = 0;
+				for (int k = 0; k < 3; k++)
+					JTJ[i][j] += J(i, k) * J(j, k);
+			}
 
 		
 		#ifdef DAMPED_LEAST_SQUARES
 		for (int i = 0; i < n; i++)
-			JTJ[i][i] += 1;
+			JTJ[i][i] += DAMPED_LEAST_SQUARES_DAMPING;
 		#endif
 
 		vector3d s = goal - endeffector;
+
+		#ifdef ITERATIVE_DELTA_S
+			s = s * ITERATIVE_DELTA_S_MAG;
+		#endif
+
 		for (int i = 0; i < n;i++)
 			for (int j = 0; j < 3; j++)
 				JTs[i] += J(i, j) * s.coords[j];
@@ -65,17 +69,27 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 void IKSolver::solveByCCD(vector3d& goal)
 {
 	int counter = 0;
-	while (counter < MAX_ITERATIONS)
+	float eps = (goal - artbody.getEndEffector()).mag();
+	while (eps > EPSILON && counter < MAX_ITERATIONS)
 	{
-		for (int i = artbody.getNoBones() - 1; i > 0; i++)
+		for (int i = artbody.getNoBones() - 1; i >= 0; i--)
 		{
 			vector3d& endeffector = artbody.getEndEffector();
 			vector3d& root = artbody.getBones()[i]->getPosition();
+			
 			vector3d rootToEnd = endeffector - root;
 			vector3d rootToGoal = goal - root;
+			
 			vector3d axis = (rootToEnd.cross(rootToGoal)).unit();
-
+			
+			float endgoalprod = rootToEnd.unit().dot(rootToGoal.unit());
+			if(fabs(endgoalprod) >= 1.0) continue;
+			float angle = acos(endgoalprod);
+			artbody.getBones()[i]->rotate(quatn(axis,angle));
 		}
+
+		eps = (goal - artbody.getEndEffector()).mag();
+		counter++;
 	}
 }
 

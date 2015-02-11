@@ -3,7 +3,7 @@
 #include "includes.h"
 #include "ConstrainedRows.h"
 
-#define MAX_ITER 20
+#define MAX_ITER 100
 #define EPSILON 0.01
 
 
@@ -18,12 +18,12 @@ class ConjugateGradientSolver
 public:
 	ConjugateGradientSolver();
 	~ConjugateGradientSolver(void);
-	void initSolver(int _n, float** A);
+	void initSolver(int _n, float** __restrict A);
 
-	void solve(float* x, float* b);
-	void solveWithConstraints(float* x, float* b, bool* allowed);
+	void solve(float* __restrict x, float* __restrict b);
+	void solveWithConstraints(float* __restrict x, float* __restrict b, bool* __restrict allowed);
 
-	float dot(float* a, float* b, int k)
+	float dot(float* __restrict a, float* __restrict b, int k)
 	{
 		float r=0;
 		for(int i=0;i<k;i++)

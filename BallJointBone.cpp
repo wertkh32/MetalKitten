@@ -11,10 +11,20 @@ Matrix3d BallJointBone::getJacobian3DOF(vector3d& endeffector)
 	return jacobian;
 }
 
-vector3d BallJointBone::getJacobianQuatn(vector3d& endeffector, vector3d& goal)
+void BallJointBone::rotate(quatn& q)
+{
+	rotation = q * rotation; 
+	endposition = q * (endposition - position) + position;
+
+	for (int i = 0; i < no_children; i++)
+		children[i]->rotateChild(q,endposition);
+}
+
+vector3d BallJointBone::getJacobianQuatn(vector3d& endeffector, vector3d& goal, vector3d& out_axis)
 {
 	vector3d a = endeffector - position;
 	vector3d axis = (a.cross(goal - position)).unit();
+	out_axis = axis;
 
 	return axis.cross(a);
 }
@@ -28,7 +38,7 @@ void BallJointBone::rotate(vector3d& angles)
 
 	quatn T = zrot * yrot * xrot;
 
-	bone::rotate(T);
+	rotate(T);
 }
 
 void BallJointBone::render()

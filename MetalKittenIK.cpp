@@ -5,7 +5,7 @@
 #include "HingeJointBone.h"
 #include "IKSolver.h"
 #include "Chain.h"
-
+#include "HingeChain.h"
 #include "GUIUtils.h"
 
 static int shoulder = 0, elbow = 0;
@@ -13,7 +13,9 @@ GUIUtils gui;
 bool start=false;
 
 vector3d arr[5] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0), vector3d(0, 12, 0) };
-Chain chain(arr, 5);
+vector3d axes[4] = { vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0) };
+HingeChain chain(arr,axes, 5);
+//Chain chain(arr, 5);
 IKSolver solver(chain);
 
 void lettherebelight(){
@@ -103,7 +105,7 @@ void display(void)
 
 		   if (start)
 			   solver.solveByJacobianInverse(gui.getCursorPos());
-
+			   //solver.solveByCCD(gui.getCursorPos());
 		   chain.render();
 
 		   drawfloor();

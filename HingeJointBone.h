@@ -12,8 +12,8 @@ class HingeJointBone :
 		return quatn(rotaxis, angle);
 	};
 public:
+	void rotate(quatn& p);
 	void rotate(float angle);
-	void projectedRotate(vector3d& ccdaxis, float angle);
 	vector3d getJacobianRow(vector3d& endeffector);
 	void render();
 

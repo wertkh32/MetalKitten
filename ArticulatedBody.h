@@ -16,10 +16,10 @@ public:
 	int getNoJacobianRows(){ return no_rows; }
 	vector3d& getEndEffector(){ return bones[end_index]->getEndPosition(); }
 	QuickArray<bone*, MAX_BONES>& getBones(){ return bones; }
-	virtual void solverRotate(float* d0) = 0;
+	
 	~ArticulatedBody();
 	virtual void render() = 0;
-	virtual GenMatrix<float, MAX_BONES * 3, 3>& getJacobian() = 0;
-
+	virtual GenMatrix<float, MAX_BONES * 3, 3>& getJacobian(vector3d& goal) = 0;
+	virtual void solverRotate(float* d0) = 0;
 };
 

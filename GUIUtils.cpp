@@ -71,7 +71,7 @@ void GUIUtils::onMouseMove(int x, int y)
 	{
 		updateMouse(x, y);
 		int sgn = (mouseX - pmouseX) < 0 ? -1 : 1;
-		sceneRot *= quatn(vector3d(0, 1, 0), sgn);
+		sceneRot *= quatn(vector3d(0, 1, 0), sgn * 0.02);
 	}
 }
 
