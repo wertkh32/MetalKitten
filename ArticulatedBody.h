@@ -15,6 +15,7 @@ public:
 	int getNoBones(){ return bones.size(); }
 	int getNoJacobianRows(){ return no_rows; }
 	vector3d& getEndEffector(){ return bones[end_index]->getEndPosition(); }
+	QuickArray<bone*, MAX_BONES>& getBones(){ return bones; }
 	virtual void solverRotate(float* d0) = 0;
 	~ArticulatedBody();
 	virtual void render() = 0;

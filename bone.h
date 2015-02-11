@@ -15,6 +15,7 @@ protected:
 	quatn rotation;
 
 	void	  rotateChild(quatn& q, vector3d& parentpos);
+	virtual   quatn applyConstraints(quatn& q) = 0;
 public:
 	bone(vector3d& _pos, vector3d& _endpos):position(_pos),endposition(_endpos),no_children(0){}
 
@@ -24,7 +25,7 @@ public:
 	float	  getLength(){return (endposition - position).mag();}
 	quatn&	  getRotation(){return rotation;}
 	bool      boneFull(){return no_children == MAX_CHILDREN;}
-	void      rotate(quatn& q);
+	void      rotate(quatn& p);
 
 	virtual void render()=0;
 

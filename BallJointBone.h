@@ -4,6 +4,7 @@ class BallJointBone :
 	public bone
 {
 	vector3d angles;
+	quatn applyConstraints(quatn& q){ return q; }
 public:
 	void rotate(vector3d& angles);
 	Matrix3d getJacobian3DOF(vector3d& endeffector);

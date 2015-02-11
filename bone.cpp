@@ -6,8 +6,9 @@ void bone::addChild(bone* _bone)
 		children[no_children++] = _bone;
 }
 
-void bone::rotate(quatn& q)
+void bone::rotate(quatn& p)
 {
+	quatn q = applyConstraints(p);
 	rotation = q * rotation; 
 	endposition = q * (endposition - position) + position;
 

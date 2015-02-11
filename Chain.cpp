@@ -33,7 +33,7 @@ void Chain::solverRotate(float* d0)
 {
 	for (int i = 0; i < getNoBones(); i++)
 	{
-		vector3d angles = vector3d(TO_DEG(d0[i * 3]), TO_DEG(d0[i * 3 + 1]), TO_DEG(d0[i * 3 + 2]));
+		vector3d angles = vector3d(d0[i * 3], d0[i * 3 + 1], d0[i * 3 + 2]);
 		((BallJointBone*)bones[i])->rotate(angles);
 	}
 }

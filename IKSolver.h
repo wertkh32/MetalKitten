@@ -15,7 +15,7 @@ class IKSolver
 public:
 	IKSolver(ArticulatedBody& _artbody);
 	void solveByJacobianInverse(vector3d& goal);
-
+	void solveByCCD(vector3d& goal);
 
 	~IKSolver();
 };

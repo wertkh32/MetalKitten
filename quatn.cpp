@@ -15,15 +15,11 @@ quatn::quatn(float sca, vector3d vec){
 
 quatn::quatn(vector3d q, float angle)
 {
-	angle=TO_RAD(angle);
 	s=cos(angle/2);
 	v=q*sin(angle/2);
 }
 
 quatn::quatn(float x, float y, float z){
-	x=TO_RAD(x);
-	y=TO_RAD(y);
-	z=TO_RAD(z);
 	float cosx=cos(x*0.5),
 		  cosy=cos(y*0.5),
 		  cosz=cos(z*0.5);

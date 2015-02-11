@@ -62,6 +62,24 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 }
 
 
+void IKSolver::solveByCCD(vector3d& goal)
+{
+	int counter = 0;
+	while (counter < MAX_ITERATIONS)
+	{
+		for (int i = artbody.getNoBones() - 1; i > 0; i++)
+		{
+			vector3d& endeffector = artbody.getEndEffector();
+			vector3d& root = artbody.getBones()[i]->getPosition();
+			vector3d rootToEnd = endeffector - root;
+			vector3d rootToGoal = goal - root;
+			vector3d axis = (rootToEnd.cross(rootToGoal)).unit();
+
+		}
+	}
+}
+
+
 IKSolver::~IKSolver()
 {
 	free(d0);
