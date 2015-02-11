@@ -2,8 +2,11 @@
 
 void bone::addChild(bone* _bone)
 {
-	if(!boneFull())
+	if (!boneFull())
+	{
+		_bone->parent = this;
 		children[no_children++] = _bone;
+	}
 }
 
 void bone::rotateChild(quatn& q, vector3d& parentendpos)

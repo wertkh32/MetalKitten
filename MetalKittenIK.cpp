@@ -104,8 +104,9 @@ void display(void)
 		   glColor3f(1,0,0);
 
 		   if (start)
-			   solver.solveByJacobianInverse(gui.getCursorPos());
-			   //solver.solveByCCD(gui.getCursorPos());
+			   //solver.solveByJacobianInverse(gui.getCursorPos());
+			   solver.solveByCCD(gui.getCursorPos());
+
 		   chain.render();
 
 		   drawfloor();
@@ -135,7 +136,7 @@ void keyboard (unsigned char key, int x, int y)
    
    switch (key) {
       case 'm':
-         start=true;
+         start=!start;
 		
          break;
       case 27:
@@ -172,7 +173,7 @@ int main(int argc, char** argv)
    glutInitWindowPosition (100, 100);
    glutCreateWindow (argv[0]);
    init ();
-   
+
    printf("Press M to start");
    
    glutTimerFunc(1000/60, timer, 60);

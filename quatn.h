@@ -20,6 +20,7 @@ public:
 	quatn inverse();
 	quatn unit();
 	float mag();
+	vector3d toEuler();
 
 	quatn operator+(quatn& q);//add
 	quatn operator-(quatn& q);//subtract 

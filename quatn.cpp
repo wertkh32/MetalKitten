@@ -20,7 +20,7 @@ quatn::quatn(vector3d q, float angle)
 }
 
 quatn::quatn(float x, float y, float z){
-	float cosx=cos(x*0.5),
+	/*float cosx=cos(x*0.5),
 		  cosy=cos(y*0.5),
 		  cosz=cos(z*0.5);
 
@@ -31,7 +31,21 @@ quatn::quatn(float x, float y, float z){
 	s= cosz*cosy*cosx + sinz*siny*sinx;
 	v=vector3d(cosz*cosy*sinx - sinz*siny*cosx,
 			   cosz*siny*cosx + sinz*cosy*sinx,
-			   sinz*cosy*cosx - cosz*siny*sinx);
+			   sinz*cosy*cosx - cosz*siny*sinx);*/
+
+	quatn xrot = quatn(vector3d(1, 0, 0), x);
+	quatn yrot = quatn(vector3d(0, 1, 0), y);
+	quatn zrot = quatn(vector3d(0, 0, 1), z);
+
+	*this = zrot * yrot * xrot;
+}
+
+vector3d quatn::toEuler()
+{
+	return vector3d(
+		atan2(2 * v.x*s - 2 * v.y*v.z, 1 - 2 * v.x*v.x - 2 * v.z*v.z),
+		atan2(2 * v.y*s - 2 * v.x*v.z, 1 - 2 * v.y*v.y - 2 * v.z*v.z),
+		asin(2 * v.x*v.y + 2 * v.z*s));
 }
 
 Matrix4d quatn::toRotMatrix(){

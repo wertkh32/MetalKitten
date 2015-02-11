@@ -15,5 +15,6 @@ public:
 	GenMatrix<float, MAX_BONES * 3, 3>& Chain::getJacobian(vector3d& goal);
 	void solverRotate(float* d0);
 	~Chain();
+
 };
 
