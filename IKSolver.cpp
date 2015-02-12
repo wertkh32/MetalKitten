@@ -20,7 +20,7 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 	//printf("HELLO");
 	for (int i = 0; i < n; i++)
 		d0[i] = 0;
-
+	printf("%f",(goal - endeffector).mag());
 	while ((goal - endeffector).mag() > EPSILON && counter < MAX_ITERATIONS)
 	{
 		for (int i = 0; i < n; i++)
@@ -59,7 +59,10 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 		//and subject to floating point errors.
 		float r = 0;
 		for (int i = 0; i < n; i++)
+		{
 			r += fabs(d0[i]);
+			printf("%f ",d0[i]);
+		}
 		if (r < 0.001) break;
 		/////////////////////////////////////////
 

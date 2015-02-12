@@ -2,7 +2,13 @@
 
 void HingeJointBone::rotate(float angle)
 {
-	rotate(quatn((rotation * axis),angle));
+	//rotate(quatn((rotation * axis),angle));
+	quatn q = quatn((rotation * axis),angle);
+	rotation = q * rotation; 
+	endposition = q * (endposition - position) + position;
+
+	for (int i = 0; i < no_children; i++)
+		children[i]->rotateChild(q,endposition);
 }
 
 vector3d HingeJointBone::getJacobianRow(vector3d& endeffector)

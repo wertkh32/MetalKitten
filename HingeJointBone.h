@@ -8,7 +8,8 @@ class HingeJointBone :
 	{
 		vector3d& ccdaxis = q.v.unit();
 		vector3d rotaxis = rotation * axis;
-		float angle = (acos(q.s) * 2.0) * ccdaxis.dot(rotaxis);
+		float w = CLAMP(q.s,-0.999999,0.999999);
+		float angle = (acos(w) * 2.0) * ccdaxis.dot(rotaxis);
 		return quatn(rotaxis, angle);
 	};
 public:
