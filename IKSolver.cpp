@@ -84,7 +84,11 @@ void IKSolver::solveByCCD(vector3d& goal)
 			vector3d axis = (rootToEnd.cross(rootToGoal)).unit();
 			
 			float endgoalprod = rootToEnd.unit().dot(rootToGoal.unit());
-			if(fabs(endgoalprod) >= 1.0) continue;
+			if (fabs(endgoalprod) >= 1.0)
+			{
+				pbone = pbone->getParent();
+				continue;
+			}
 			float angle = acos(endgoalprod);
 			pbone->rotate(quatn(axis,angle));
 			pbone = pbone->getParent();

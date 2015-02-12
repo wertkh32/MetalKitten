@@ -14,8 +14,8 @@ bool start=false;
 
 vector3d arr[5] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0), vector3d(0, 12, 0) };
 vector3d axes[4] = { vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0) };
-HingeChain chain(arr,axes, 5);
-//Chain chain(arr, 5);
+//HingeChain chain(arr,axes, 5);
+Chain chain(arr, 5);
 IKSolver solver(chain);
 
 void lettherebelight(){
@@ -104,8 +104,8 @@ void display(void)
 		   glColor3f(1,0,0);
 
 		   if (start)
-			   //solver.solveByJacobianInverse(gui.getCursorPos());
-			   solver.solveByCCD(gui.getCursorPos());
+			   solver.solveByJacobianInverse(gui.getCursorPos());
+			   //solver.solveByCCD(gui.getCursorPos());
 
 		   chain.render();
 
