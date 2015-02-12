@@ -29,7 +29,7 @@ class GUIUtils
 
 
 public:
-	GUIUtils() :mouseDown(false), rightMouseDown(false),shiftDown(false), cameraPos(0.0, 0.0, 20.0), lookAt(0,0,-1)
+	GUIUtils() :mouseDown(false), rightMouseDown(false),shiftDown(false), cameraPos(0.0, 0.0, 30.0), lookAt(0,0,-1)
 	{
 
 	}

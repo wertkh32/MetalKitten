@@ -53,11 +53,17 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 				JTs[i] += JT(i, j) * s.coords[j];
 		
 		solver.solve(d0, JTs);
+
+		//stability check////////////////////////
+		//very small angle changes means quatn axis probably isnt correct.
+		//and subject to floating point errors.
+		float r = 0;
+		for (int i = 0; i < n; i++)
+			r += fabs(d0[i]);
+		if (r < 0.001) break;
+		/////////////////////////////////////////
+
 		artbody.solverRotate(d0);
-
-		//for (int i = 0; i < n; i++)
-		//	printf("%f ", d0[i]);
-
 
 		endeffector = artbody.getEndEffector();
 		++counter;

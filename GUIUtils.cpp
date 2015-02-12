@@ -42,7 +42,7 @@ void GUIUtils::renderCursor()
 	
 		cursorPos = get3DFrom2D(mouseX, mouseY);
 		vector3d ppp = sceneRot.conjugate() * cursorPos - cameraPos;
-		cursorPos = projectToCameraPlane(ppp, 20);
+		cursorPos = projectToCameraPlane(ppp, 30);
 		cursorPos = sceneRot * (cursorPos + cameraPos);
 	}
 	//printf("%f %f %f\n", ppp.x, ppp.y, ppp.z);

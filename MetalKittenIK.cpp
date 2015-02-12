@@ -12,10 +12,10 @@ static int shoulder = 0, elbow = 0;
 GUIUtils gui;
 bool start=false;
 
-vector3d arr[5] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 7, 0), vector3d(0, 9, 0), vector3d(0, 12, 0) };
-vector3d axes[4] = { vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0) };
-//HingeChain chain(arr,axes, 5);
-Chain chain(arr, 5);
+vector3d arr[7] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 6, 0), vector3d(0, 9, 0), vector3d(0, 12, 0), vector3d(0, 15, 0), vector3d(0, 18, 0) };
+vector3d axes[6] = { vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0), vector3d(1, 0, 0) };
+//HingeChain chain(arr,axes, 7);
+Chain chain(arr, 7);
 IKSolver solver(chain);
 
 void lettherebelight(){
