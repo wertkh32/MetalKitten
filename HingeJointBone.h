@@ -7,7 +7,8 @@ class HingeJointBone :
 	quatn applyConstraints(quatn& q)
 	{
 		vector3d& ccdaxis = q.v.unit();
-		vector3d rotaxis = rotation * axis;
+		vector3d rotaxis = (rotation * axis).unit();
+		printf("%f", ccdaxis.dot(rotaxis));
 		float w = CLAMP(q.s,-0.999999,0.999999);
 		float angle = (acos(w) * 2.0) * ccdaxis.dot(rotaxis);
 		return quatn(rotaxis, angle);

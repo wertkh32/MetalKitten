@@ -20,7 +20,7 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 	//printf("HELLO");
 	for (int i = 0; i < n; i++)
 		d0[i] = 0;
-	printf("%f",(goal - endeffector).mag());
+	//printf("%f",(goal - endeffector).mag());
 	while ((goal - endeffector).mag() > EPSILON && counter < MAX_ITERATIONS)
 	{
 		for (int i = 0; i < n; i++)
@@ -61,7 +61,7 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 		for (int i = 0; i < n; i++)
 		{
 			r += fabs(d0[i]);
-			printf("%f ",d0[i]);
+			//printf("%f ",d0[i]);
 		}
 		if (r < 0.001) break;
 		/////////////////////////////////////////
@@ -72,6 +72,68 @@ void IKSolver::solveByJacobianInverse(vector3d& goal)
 		++counter;
 	}
 
+}
+
+void IKSolver::solveByJacobianRightInverse(vector3d& goal)
+{
+	vector3d endeffector = artbody.getEndEffector();
+	int counter = 0;
+	//printf("HELLO");
+	for (int i = 0; i < n; i++)
+		d0[i] = 0;
+	//printf("%f",(goal - endeffector).mag());
+	while ((goal - endeffector).mag() > EPSILON && counter < MAX_ITERATIONS)
+	{
+		GenMatrix<float, MAX_BONES * 3, 3>& JT = artbody.getJacobian(goal);
+		Matrix3d JJT;
+
+
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				JJT(i,j) = 0;
+				for (int k = 0; k < n; k++)
+					JJT(i,j) += JT(k, i) * JT(k, j);
+			}
+
+		
+		#ifdef DAMPED_LEAST_SQUARES
+		for (int i = 0; i < 3; i++)
+			JJT(i,i) += DAMPED_LEAST_SQUARES_DAMPING;
+		#endif
+
+		vector3d s = goal - endeffector;
+
+		#ifdef ITERATIVE_DELTA_S
+			s = s * ITERATIVE_DELTA_S_MAG;
+		#endif
+
+		vector3d JJTinvS = JJT.inverse() * s;
+
+		for(int i=0;i<n;i++)
+		{
+			d0[i] =0;
+			for(int j=0;j<3;j++)
+				d0[i] += JT(i,j) * JJTinvS.coords[j];
+		}		
+
+		//stability check////////////////////////
+		//very small angle changes means quatn axis probably isnt correct.
+		//and subject to floating point errors.
+		float r = 0;
+		for (int i = 0; i < n; i++)
+		{
+			r += fabs(d0[i]);
+			//printf("%f ",d0[i]);
+		}
+		if (r < 0.001) break;
+		/////////////////////////////////////////
+
+		artbody.solverRotate(d0);
+
+		endeffector = artbody.getEndEffector();
+		++counter;
+	}
 }
 
 void IKSolver::solveByCCD(vector3d& goal)
