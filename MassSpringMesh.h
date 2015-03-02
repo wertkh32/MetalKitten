@@ -9,6 +9,7 @@ struct Spring
 	int v0, v1;
 	float restLength, stiffness;
 	Spring(int _v0, int _v1, float _restLength, float _stiffness):v0(_v0), v1(_v1), restLength(_restLength), stiffness(_stiffness){}
+	Spring() :v0(0), v1(0), restLength(0), stiffness(0){}
 };
 
 struct MassPoint
@@ -16,6 +17,7 @@ struct MassPoint
 	vector3d vertex;
 	float mass;
 	MassPoint(vector3d& v, float _mass):vertex(v),mass(_mass){}
+	MassPoint() :vertex(), mass(0){}
 };
 
 class MassSpringMesh

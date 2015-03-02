@@ -53,6 +53,9 @@
     <ClCompile Include="MassSpringIntegrator.cpp">
       <Filter>MassSpring</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixOps.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -126,6 +129,9 @@
     </ClInclude>
     <ClInclude Include="MassSpringIntegrator.h">
       <Filter>MassSpring</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixOps.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

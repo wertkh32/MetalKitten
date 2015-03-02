@@ -1,4 +1,5 @@
 #pragma once
+#include "MatrixOps.h"
 #include "MassSpringMesh.h"
 #define DAMPING 0.1
 
@@ -13,21 +14,28 @@ class MassSpringIntegrator
 	float* d;
 	float* fext;
 	float* x;
+	float* b;
+
 	float* qn, *qn_1;
+
 	float** A;
 	float** J;
+	float** Ainv;
+
 	MassSpringMesh* mesh;
 
 	void init_d();
 	void init_x();
 
-public:
-	MassSpringIntegrator(MassSpringMesh* _mesh);
-	
 	void solve_d();
 	void solve_x();
 
-	void solve();
+public:
+	MassSpringIntegrator(MassSpringMesh* _mesh);
+
+	void addExtForce(int n, vector3d& f);
+	void timeStep();
+
 
 	~MassSpringIntegrator();
 };

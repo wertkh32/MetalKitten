@@ -25,6 +25,7 @@
     <ClCompile Include="MassSpringMesh.cpp" />
     <ClCompile Include="Matrix3d.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
+    <ClCompile Include="MatrixOps.cpp" />
     <ClCompile Include="quatn.cpp" />
     <ClCompile Include="MetalKitten.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="MassSpringMesh.h" />
     <ClInclude Include="Matrix3d.h" />
     <ClInclude Include="Matrix4d.h" />
+    <ClInclude Include="MatrixOps.h" />
     <ClInclude Include="quatn.h" />
     <ClInclude Include="vector3d.h" />
     <ClInclude Include="QuickArray.h" />
@@ -73,7 +75,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

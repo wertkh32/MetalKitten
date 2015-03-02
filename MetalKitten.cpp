@@ -7,6 +7,7 @@
 #include "Chain.h"
 #include "HingeChain.h"
 #include "GUIUtils.h"
+#include "MatrixOps.h"
 
 static int shoulder = 0, elbow = 0;
 GUIUtils gui;
@@ -177,6 +178,31 @@ int main(int argc, char** argv)
 
    printf("Press M to start");
    
+
+   //float** a = (float**)calloc(3, sizeof(float*));
+   //a[0] = (float*)calloc(3, sizeof(float));
+   //a[1] = (float*)calloc(3, sizeof(float));
+   //a[2] = (float*)calloc(3, sizeof(float));
+
+   //a[0][0] = 1; a[0][1] = 0.2; a[0][2] = 0.3;
+   //a[1][0] = 0.2; a[1][1] = 1; a[1][2] = 0.2;
+   //a[2][0] = 0.3; a[2][1] = 0.2; a[2][2] = 1;
+
+   //float** o = (float**)calloc(3, sizeof(float*));
+   //o[0] = (float*)calloc(3, sizeof(float));
+   //o[1] = (float*)calloc(3, sizeof(float));
+   //o[2] = (float*)calloc(3, sizeof(float));
+
+   //MatrixOps::InverseMatrix(a, o, 3);
+
+   //for (int i = 0; i < 3; i++)
+   //{
+	  // for (int j = 0; j < 3; j++)
+		 //  printf("%f ", o[i][j]);
+	  // printf("\n");
+   //}
+
+
    glutTimerFunc(1000/60, timer, 60);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape);
