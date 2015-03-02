@@ -1,7 +1,7 @@
 #pragma once
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
-#define DAMPING 0.95
+#define DAMPING 1
 #define MAX_ITERATION 5
 
 class MassSpringIntegrator
@@ -24,18 +24,27 @@ class MassSpringIntegrator
 	float** J;
 	float** Ainv;
 
+	bool* constrained;
+
+	QuickArray<int, 100> constraints;
+
 	MassSpringMesh* mesh;
 
 	void init_d();
 	void init_x();
 	void init_q();
+	void removeConstrainedRows();
 
 	void solve_d();
 	void solve_x();
 
+	void reset_constrained_x();
+
 public:
 	MassSpringIntegrator(MassSpringMesh* _mesh);
 
+	void addConstrainedDOF(int n){ constraints.push(n); }
+	void initSolver();
 	void addExtForce(int n, vector3d& f);
 	void timeStep();
 

@@ -8,6 +8,9 @@
 #include "HingeChain.h"
 #include "GUIUtils.h"
 #include "MatrixOps.h"
+#include "MassSpringMesh.h"
+#include "MassSpringIntegrator.h"
+
 
 static int shoulder = 0, elbow = 0;
 GUIUtils gui;
@@ -19,6 +22,10 @@ vector3d axes[6] = { vector3d(1, 0, 0), vector3d(0, 1, 0), vector3d(0, 0, 1), ve
 HingeChain chain(arr,axes, 7);
 //Chain chain(arr, 7);
 IKSolver solver(chain);
+
+MassSpringMesh mesh;
+MassSpringIntegrator inte(&mesh);
+
 
 void lettherebelight(){
 
@@ -106,10 +113,15 @@ void display(void)
 		   glColor3f(1,0,0);
 
 		   if (start)
-			   solver.solveByJacobianInverse(gui.getCursorPos());
+		   {
+			   inte.timeStep();
+			   //start = !start;
+		   }
+			   //solver.solveByJacobianInverse(gui.getCursorPos());
 			   //solver.solveByCCD(gui.getCursorPos());
 
-		   chain.render();
+			   //chain.render();
+			   mesh.render();
 
 		   drawfloor();
 		   gui.renderCursor();
@@ -178,6 +190,22 @@ int main(int argc, char** argv)
 
    printf("Press M to start");
    
+   mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 1));
+   mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 1));
+   mesh.addMassPoint(MassPoint(vector3d(2, -5, 0), 1));
+   mesh.addMassPoint(MassPoint(vector3d(-2, -5, 0), 1));
+
+   mesh.addSpring(Spring(0, 1, 4, 1));
+   mesh.addSpring(Spring(1, 2, 4, 1));
+   mesh.addSpring(Spring(2, 3, 4, 1));
+   mesh.addSpring(Spring(3, 0, 4, 1));
+
+   mesh.addSpring(Spring(0, 2, sqrt(8.0f), 1));
+   mesh.addSpring(Spring(1, 3, sqrt(8.0f), 1));
+
+   inte.addConstrainedDOF(0);
+   inte.addConstrainedDOF(1);
+   inte.initSolver();
 
    //float** a = (float**)calloc(3, sizeof(float*));
    //a[0] = (float*)calloc(3, sizeof(float));

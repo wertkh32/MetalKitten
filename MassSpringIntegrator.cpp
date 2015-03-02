@@ -3,6 +3,39 @@
 
 MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 {
+
+}
+
+
+void
+MassSpringIntegrator::removeConstrainedRows()
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (constrained[i])
+		{
+
+			for (int j = 0; j < dim; j++)
+			{
+				A[i * 3][j] = 0;
+				A[i * 3 + 1][j] = 0;
+				A[i * 3 + 2][j] = 0;
+
+				A[j][i * 3] = 0;
+				A[j][i * 3 + 1] = 0;
+				A[j][i * 3 + 2] = 0;
+			}
+
+			A[i * 3][i * 3] = 1;
+			A[i * 3 + 1][i * 3 + 1] = 1;
+			A[i * 3 + 2][i * 3 + 2] = 1;
+		}
+	}
+}
+
+void
+MassSpringIntegrator::initSolver()
+{
 	n = mesh->getNoMassPoints();
 	s = mesh->getNoSprings();
 	dim = n * 3;
@@ -19,6 +52,8 @@ MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 	b = (float*)calloc(dim, sizeof(float));
 	temp = (float*)calloc(dim, sizeof(float));
 
+	constrained = (bool*)calloc(n, sizeof(bool));
+
 
 	A = (float**)calloc(dim, sizeof(float*));
 	for (int i = 0; i < dim; i++)
@@ -33,16 +68,29 @@ MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 		Ainv[i] = (float*)calloc(dim, sizeof(float));
 
 
+	for (int i = 0; i < constraints.size(); i++)
+		constrained[constraints[i]] = true;
+
+
 	mesh->getSystemMatrix(A);
 	mesh->getJ(J);
 
+	removeConstrainedRows();
+
 	MatrixOps::InverseMatrix(A, Ainv, dim);
+
+
+	for (int i = 0; i < dim; i++)
+	{
+		printf("\n");
+		for (int j = 0; j < dim; j++)
+			printf("%f ", Ainv[i][j]);
+	}
 
 	init_x();
 	init_d();
 	init_q();
 }
-
 
 void
 MassSpringIntegrator::init_x()
@@ -78,6 +126,21 @@ MassSpringIntegrator::init_q()
 }
 
 void
+MassSpringIntegrator::reset_constrained_x()
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (constrained[i])
+		{
+			vector3d& v = mesh->getMassPoint(i).vertex;
+			x[i * 3] = v.x;
+			x[i * 3 + 1] = v.y;
+			x[i * 3 + 2] = v.z;
+		}
+	}
+}
+
+void
 MassSpringIntegrator::addExtForce(int n, vector3d& f)
 {
 	fext[n * 3] = f.x;
@@ -90,6 +153,7 @@ MassSpringIntegrator::solve_x()
 {
 	for (int i = 0; i < dim; i++)
 	{
+		if (constrained[i / 3]) continue;
 		x[i] = 0;
 		for (int j = 0; j < dim; j++)
 			x[i] += Ainv[i][j] * b[j];
@@ -144,19 +208,25 @@ MassSpringIntegrator::timeStep()
 			b[i] = 0;
 			for (int j = 0; j < dim_s; j++)
 				b[i] += J[i][j] * d[j];
+			b[i] *= DT *DT;
 			b[i] += temp[i];
 		}
 
 		solve_x();
 		solve_d();
+
+		counter++;
 	}
 
 	for (int i = 0; i < n; i++)
 	{
 		vector3d& v = mesh->getMassPoint(i).vertex;
+		
 		v.x = x[i * 3];
 		v.y = x[i * 3 + 1];
 		v.z = x[i * 3 + 2];
+
+		printf("%f %f %f\n", v.x, v.y, v.z);
 	}
 
 	for (int i = 0; i < dim; i++)
@@ -174,6 +244,7 @@ MassSpringIntegrator::~MassSpringIntegrator()
 	free(x);
 	free(b);
 	free(temp);
+	free(constrained);
 
 	for (int i = 0; i < dim; i++)
 		free(Ainv[i]);

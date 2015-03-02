@@ -69,12 +69,16 @@ MassSpringMesh::getSystemMatrix(float** A)
 
 	getStiffnessWeightedLaplacian(A);
 
+	for (int i = 0; i < nv * 3;i++)
+		for (int j = 0; j < nv * 3; j++)
+			A[i][j] *= DT * DT;
+
 	for (int i = 0; i < nv; i++)
 	{
 		float mass = getMassPoint(i).mass;
-		A[i * 3][i * 3]			= A[i * 3][i * 3] * DT * DT +  mass;
-		A[i * 3 + 1][i * 3 + 1] = A[i * 3 + 1][i * 3 + 1] * DT * DT + mass;
-		A[i * 3 + 2][i * 3 + 2] = A[i * 3 + 2][i * 3 + 2] * DT * DT + mass;
+		A[i * 3][i * 3]			+=  mass;
+		A[i * 3 + 1][i * 3 + 1] += mass;
+		A[i * 3 + 2][i * 3 + 2] += mass;
 	}
 	
 
@@ -86,6 +90,30 @@ MassSpringMesh::render()
 	int s = getNoSprings();
 	int nv = getNoMassPoints();
 
+	for (int i = 0; i < nv; i++)
+	{
+		vector3d& v = getMassPoint(i).vertex;
+
+		glPushMatrix();
+		glTranslatef(v.x, v.y, v.z);
+		glutSolidSphere(0.5, 10, 10);
+		glPopMatrix();
+	}
+
+	glPushMatrix();
+	glBegin(GL_LINES);
+	glLineWidth(3.0f);
+	for (int i = 0; i < s; i++)
+	{
+		Spring& s = getSpring(i);
+		vector3d& v0 = getMassPoint(s.v0).vertex;
+		vector3d& v1 = getMassPoint(s.v1).vertex;
+
+		glVertex2fv(v0.coords);
+		glVertex2fv(v1.coords);
+	}
+	glEnd();
+	glPopMatrix();
 
 }
 
