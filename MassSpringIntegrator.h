@@ -2,6 +2,7 @@
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
 #define DAMPING 0.1
+#define MAX_ITERATION 5
 
 class MassSpringIntegrator
 {
@@ -15,6 +16,7 @@ class MassSpringIntegrator
 	float* fext;
 	float* x;
 	float* b;
+	float* temp;
 
 	float* qn, *qn_1;
 
@@ -26,6 +28,7 @@ class MassSpringIntegrator
 
 	void init_d();
 	void init_x();
+	void init_q();
 
 	void solve_d();
 	void solve_x();

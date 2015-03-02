@@ -17,6 +17,7 @@ MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 	qn_1 = (float*)calloc(dim, sizeof(float));
 	x = (float*)calloc(dim, sizeof(float));
 	b = (float*)calloc(dim, sizeof(float));
+	temp = (float*)calloc(dim, sizeof(float));
 
 
 	A = (float**)calloc(dim, sizeof(float*));
@@ -39,6 +40,7 @@ MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 
 	init_x();
 	init_d();
+	init_q();
 }
 
 
@@ -66,6 +68,13 @@ MassSpringIntegrator::init_d()
 		d[i * 3 + 1] = dd.y;
 		d[i * 3 + 2] = dd.z;
 	}
+}
+
+void
+MassSpringIntegrator::init_q()
+{
+	for (int i = 0; i < dim; i++)
+		qn_1[i] = qn[i] = x[i];
 }
 
 void
@@ -107,6 +116,51 @@ void
 MassSpringIntegrator::timeStep()
 {
 
+
+	for (int i = 0; i < dim; i++)
+	{
+		qn_1[i] = qn[i];
+		qn[i] = x[i];
+	}
+
+	for (int i = 0; i < dim; i++)
+		temp[i] = -fext[i] * DT * DT;
+
+	for (int i = 0; i < n; i++)
+	{
+		float mass = mesh->getMassPoint(i).mass;
+		temp[i * 3] += mass * (2 * qn[i * 3] - qn_1[i * 3]);
+		temp[i * 3 + 1] += mass * (2 * qn[i * 3 + 1] - qn_1[i * 3 + 1]);
+		temp[i * 3 + 2] += mass * (2 * qn[i * 3 + 2] - qn_1[i * 3 + 2]);
+	}
+
+	int counter = 0;
+
+	//add some energy cutoff
+	while (counter < MAX_ITERATION)
+	{
+		for (int i = 0; i < dim; i++)
+		{
+			b[i] = 0;
+			for (int j = 0; j < dim_s; j++)
+				b[i] += J[i][j] * d[j];
+			b[i] += temp[i];
+		}
+
+		solve_x();
+		solve_d();
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		vector3d& v = mesh->getMassPoint(i).vertex;
+		v.x = x[i * 3];
+		v.y = x[i * 3 + 1];
+		v.z = x[i * 3 + 2];
+	}
+
+	for (int i = 0; i < dim; i++)
+		fext[i] = 0;
 }
 
 
@@ -119,6 +173,7 @@ MassSpringIntegrator::~MassSpringIntegrator()
 	free(qn_1);
 	free(x);
 	free(b);
+	free(temp);
 
 	for (int i = 0; i < dim; i++)
 		free(Ainv[i]);
