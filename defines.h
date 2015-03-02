@@ -6,3 +6,4 @@
 #define INF 10000000
 #define FLOOR -12
 #define LINEAR_BLEND
+#define DT (1.0/60.0)

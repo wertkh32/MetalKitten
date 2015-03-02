@@ -21,10 +21,12 @@
     <ClCompile Include="HingeChain.cpp" />
     <ClCompile Include="HingeJointBone.cpp" />
     <ClCompile Include="IKSolver.cpp" />
+    <ClCompile Include="MassSpringIntegrator.cpp" />
+    <ClCompile Include="MassSpringMesh.cpp" />
     <ClCompile Include="Matrix3d.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
     <ClCompile Include="quatn.cpp" />
-    <ClCompile Include="MetalKittenIK.cpp" />
+    <ClCompile Include="MetalKitten.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
     <ClCompile Include="vector3d.cpp" />
   </ItemGroup>
@@ -46,6 +48,8 @@
     <ClInclude Include="HingeJointBone.h" />
     <ClInclude Include="IKSolver.h" />
     <ClInclude Include="includes.h" />
+    <ClInclude Include="MassSpringIntegrator.h" />
+    <ClInclude Include="MassSpringMesh.h" />
     <ClInclude Include="Matrix3d.h" />
     <ClInclude Include="Matrix4d.h" />
     <ClInclude Include="quatn.h" />
@@ -55,7 +59,7 @@
   <PropertyGroup Label="Globals">
     <SccProjectName />
     <SccLocalPath />
-    <ProjectName>MetalKittenIK</ProjectName>
+    <ProjectName>MetalKitten</ProjectName>
     <ProjectGuid>{5C4D457A-9108-3CED-39DD-A71435A66C44}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

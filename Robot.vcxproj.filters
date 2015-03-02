@@ -19,7 +19,6 @@
     <ClCompile Include="GUIUtils.cpp">
       <Filter>IK\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="MetalKittenIK.cpp" />
     <ClCompile Include="IKSolver.cpp">
       <Filter>IK</Filter>
     </ClCompile>
@@ -46,6 +45,13 @@
     </ClCompile>
     <ClCompile Include="HingeChain.cpp">
       <Filter>IK\Bodies</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalKitten.cpp" />
+    <ClCompile Include="MassSpringMesh.cpp">
+      <Filter>MassSpring</Filter>
+    </ClCompile>
+    <ClCompile Include="MassSpringIntegrator.cpp">
+      <Filter>MassSpring</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,12 @@
     <ClInclude Include="HingeChain.h">
       <Filter>IK\Bodies</Filter>
     </ClInclude>
+    <ClInclude Include="MassSpringMesh.h">
+      <Filter>MassSpring</Filter>
+    </ClInclude>
+    <ClInclude Include="MassSpringIntegrator.h">
+      <Filter>MassSpring</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -129,9 +141,6 @@
     <Filter Include="IK">
       <UniqueIdentifier>{fdd3776d-c370-490d-85bf-668f4be93cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="unused">
-      <UniqueIdentifier>{c424e5b4-1baa-4747-b49b-a2fc230db938}</UniqueIdentifier>
-    </Filter>
     <Filter Include="IK\GUI">
       <UniqueIdentifier>{7f25ecca-05d9-4407-b5c3-0e49c0f15903}</UniqueIdentifier>
     </Filter>
@@ -140,6 +149,12 @@
     </Filter>
     <Filter Include="IK\Bodies">
       <UniqueIdentifier>{9d828537-4dbc-4bac-956e-ddbfc1ca50c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{385d3d72-2bb9-4760-8a52-474e5db5e24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MassSpring">
+      <UniqueIdentifier>{ddd6864a-1ffd-4a55-9f90-11506d344a8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
