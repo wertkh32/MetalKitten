@@ -71,12 +71,21 @@ MassSpringMesh::getSystemMatrix(float** A)
 
 	for (int i = 0; i < nv; i++)
 	{
-		float diag = getMassPoint(i).mass * DT * DT;
-		A[i * 3][i * 3]			+= diag;
-		A[i * 3 + 1][i * 3 + 1] += diag;
-		A[i * 3 + 2][i * 3 + 2] += diag;
+		float mass = getMassPoint(i).mass;
+		A[i * 3][i * 3]			= A[i * 3][i * 3] * DT * DT +  mass;
+		A[i * 3 + 1][i * 3 + 1] = A[i * 3 + 1][i * 3 + 1] * DT * DT + mass;
+		A[i * 3 + 2][i * 3 + 2] = A[i * 3 + 2][i * 3 + 2] * DT * DT + mass;
 	}
 	
+
+}
+
+void
+MassSpringMesh::render()
+{
+	int s = getNoSprings();
+	int nv = getNoMassPoints();
+
 
 }
 

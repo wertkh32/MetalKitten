@@ -129,9 +129,9 @@ MassSpringIntegrator::timeStep()
 	for (int i = 0; i < n; i++)
 	{
 		float mass = mesh->getMassPoint(i).mass;
-		temp[i * 3] += mass * (2 * qn[i * 3] - qn_1[i * 3]);
-		temp[i * 3 + 1] += mass * (2 * qn[i * 3 + 1] - qn_1[i * 3 + 1]);
-		temp[i * 3 + 2] += mass * (2 * qn[i * 3 + 2] - qn_1[i * 3 + 2]);
+		temp[i * 3] += mass * ((1 + DAMPING) * qn[i * 3] - DAMPING * qn_1[i * 3]);
+		temp[i * 3 + 1] += mass * ((1 + DAMPING) * qn[i * 3 + 1] - DAMPING * qn_1[i * 3 + 1]);
+		temp[i * 3 + 2] += mass * ((1 + DAMPING) * qn[i * 3 + 2] - DAMPING * qn_1[i * 3 + 2]);
 	}
 
 	int counter = 0;

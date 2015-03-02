@@ -28,6 +28,8 @@ class MassSpringMesh
 public:
 	MassSpringMesh();
 
+	void render();
+
 	int getNoMassPoints() { return masspoints.size(); }
 	int getNoSprings() { return springs.size(); }
 
