@@ -2,7 +2,7 @@
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
 #define DAMPING 1
-#define MAX_ITERATION 5
+#define MAX_ITERATION 10
 
 class MassSpringIntegrator
 {

@@ -6,33 +6,6 @@ MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
 
 }
 
-
-void
-MassSpringIntegrator::removeConstrainedRows()
-{
-	for (int i = 0; i < n; i++)
-	{
-		if (constrained[i])
-		{
-
-			for (int j = 0; j < dim; j++)
-			{
-				A[i * 3][j] = 0;
-				A[i * 3 + 1][j] = 0;
-				A[i * 3 + 2][j] = 0;
-
-				A[j][i * 3] = 0;
-				A[j][i * 3 + 1] = 0;
-				A[j][i * 3 + 2] = 0;
-			}
-
-			A[i * 3][i * 3] = 1;
-			A[i * 3 + 1][i * 3 + 1] = 1;
-			A[i * 3 + 2][i * 3 + 2] = 1;
-		}
-	}
-}
-
 void
 MassSpringIntegrator::initSolver()
 {
@@ -74,8 +47,6 @@ MassSpringIntegrator::initSolver()
 
 	mesh->getSystemMatrix(A);
 	mesh->getJ(J);
-
-	removeConstrainedRows();
 
 	MatrixOps::InverseMatrix(A, Ainv, dim);
 
@@ -213,6 +184,9 @@ MassSpringIntegrator::timeStep()
 		}
 
 		solve_x();
+
+		reset_constrained_x();
+
 		solve_d();
 
 		counter++;

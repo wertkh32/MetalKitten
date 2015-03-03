@@ -101,8 +101,9 @@ MassSpringMesh::render()
 	}
 
 	glPushMatrix();
-	glBegin(GL_LINES);
 	glLineWidth(3.0f);
+	glBegin(GL_LINES);
+
 	for (int i = 0; i < s; i++)
 	{
 		Spring& s = getSpring(i);

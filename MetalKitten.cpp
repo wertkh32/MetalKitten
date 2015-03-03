@@ -190,19 +190,23 @@ int main(int argc, char** argv)
 
    printf("Press M to start");
    
-   mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 1));
-   mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 1));
-   mesh.addMassPoint(MassPoint(vector3d(2, -5, 0), 1));
-   mesh.addMassPoint(MassPoint(vector3d(-2, -5, 0), 1));
+  mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 0.01));
+   mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 0.01));
+   mesh.addMassPoint(MassPoint(vector3d(2, -5, 0), 0.01));
+   mesh.addMassPoint(MassPoint(vector3d(-2, -5, 0), 0.01));
 
    mesh.addSpring(Spring(0, 1, 4, 1));
    mesh.addSpring(Spring(1, 2, 4, 1));
    mesh.addSpring(Spring(2, 3, 4, 1));
    mesh.addSpring(Spring(3, 0, 4, 1));
 
-   mesh.addSpring(Spring(0, 2, sqrt(8.0f), 1));
-   mesh.addSpring(Spring(1, 3, sqrt(8.0f), 1));
+   mesh.addSpring(Spring(0, 2, sqrt(32.0), 1));
+   mesh.addSpring(Spring(1, 3, sqrt(32.0), 1));
 
+   // mesh.addMassPoint(MassPoint(vector3d(0, 2, 0), 0.01));
+//	mesh.addMassPoint(MassPoint(vector3d(0, 0, 0), 0.01));
+	//mesh.addSpring(Spring(0,1,2,1));
+   ///CONSTRAINTS ARE FAULTY
    inte.addConstrainedDOF(0);
    inte.addConstrainedDOF(1);
    inte.initSolver();
