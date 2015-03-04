@@ -56,6 +56,9 @@
     <ClCompile Include="MatrixOps.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="SpatialHash.cpp">
+      <Filter>CollisionDetection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -132,6 +135,9 @@
     </ClInclude>
     <ClInclude Include="MatrixOps.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="SpatialHash.h">
+      <Filter>CollisionDetection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
