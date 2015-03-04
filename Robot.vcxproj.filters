@@ -162,5 +162,8 @@
     <Filter Include="MassSpring">
       <UniqueIdentifier>{ddd6864a-1ffd-4a55-9f90-11506d344a8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CollisionDetection">
+      <UniqueIdentifier>{8513cc36-7b13-4021-b088-f478f2dd4ff0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

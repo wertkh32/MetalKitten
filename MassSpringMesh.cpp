@@ -97,7 +97,7 @@ MassSpringMesh::render()
 
 		glPushMatrix();
 		glTranslatef(v.x, v.y, v.z);
-		glutSolidSphere(0.5, 10, 10);
+		glutSolidSphere(0.4, 10, 10);
 		glPopMatrix();
 	}
 
@@ -111,8 +111,8 @@ MassSpringMesh::render()
 		vector3d& v0 = getMassPoint(s.v0).vertex;
 		vector3d& v1 = getMassPoint(s.v1).vertex;
 
-		glVertex2fv(v0.coords);
-		glVertex2fv(v1.coords);
+		glVertex3fv(v0.coords);
+		glVertex3fv(v1.coords);
 	}
 	glEnd();
 	glPopMatrix();

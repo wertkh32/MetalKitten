@@ -186,12 +186,12 @@ void initCloth2()
 	int n = 10;
 	int step = 2;
 	float stiff = 1;
-	float mass = 0.01;
+	float mass = 0.015;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = n - 1; j >= 0; j--)
 		{
-			mesh.addMassPoint(MassPoint(vector3d(i * step - step * n * 0.5, j * step, 0), mass));
+			mesh.addMassPoint(MassPoint(vector3d(i * step - step * n * 0.5, 15, j * step - n * step), mass));
 		}
 	}
 
@@ -232,6 +232,8 @@ void initCloth2()
 
 
 	inte.addConstrainedDOF(0);
+	//inte.addConstrainedDOF(n-1);
+	//inte.addConstrainedDOF(n * n -1);
 	inte.addConstrainedDOF(n * n - n);
 	inte.initSolver();
 
