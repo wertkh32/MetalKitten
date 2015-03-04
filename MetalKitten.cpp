@@ -114,6 +114,8 @@ void display(void)
 
 		   if (start)
 		   {
+			  for (int i = 0; i < mesh.getNoMassPoints(); i++)
+				   inte.addExtForce(i, vector3d(0, 9.81 * mesh.getMassPoint(i).mass, 0));
 			   inte.timeStep();
 			   //start = !start;
 		   }
@@ -178,6 +180,100 @@ void mouseMoveFunc(int x, int y)
 	gui.onMouseMove(x, y);
 }
 
+
+void initCloth2()
+{
+	int n = 10;
+	int step = 2;
+	float stiff = 1;
+	float mass = 0.01;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = n - 1; j >= 0; j--)
+		{
+			mesh.addMassPoint(MassPoint(vector3d(i * step - step * n * 0.5, j * step, 0), mass));
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n-1; j++)
+			mesh.addSpring(Spring(i * n + j, i * n + j + 1, step, stiff));
+	}
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = 0; j < n; j++)
+			mesh.addSpring(Spring(i * n + j, (i + 1) * n + j, step, stiff));
+	}
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = 0; j < n - 1; j++)
+		{
+			mesh.addSpring(Spring(i * n + j, (i+1) * n + j + 1, sqrt(2.0f * step * step), stiff));
+			mesh.addSpring(Spring(i * n + j + 1, (i + 1) * n + j, sqrt(2.0f * step * step), stiff));
+		}
+	}
+
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n - 2; j++)
+			mesh.addSpring(Spring(i * n + j, i * n + j + 2, step * 2, stiff));
+	}
+
+	for (int i = 0; i < n - 2; i++)
+	{
+		for (int j = 0; j < n; j++)
+			mesh.addSpring(Spring(i * n + j, (i + 2) * n + j, step * 2, stiff));
+	}
+
+
+
+	inte.addConstrainedDOF(0);
+	inte.addConstrainedDOF(n * n - n);
+	inte.initSolver();
+
+}
+
+void initCloth()
+{
+	mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 0.01));
+	mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 0.01));
+	mesh.addMassPoint(MassPoint(vector3d(2, -2, 0), 0.01));
+	mesh.addMassPoint(MassPoint(vector3d(-2, -2, 0), 0.01));
+	mesh.addMassPoint(MassPoint(vector3d(2, -6, 0), 0.01));
+	mesh.addMassPoint(MassPoint(vector3d(-2, -6, 0), 0.01));
+
+	mesh.addSpring(Spring(0, 1, 4, 1));
+	mesh.addSpring(Spring(1, 2, 4, 1));
+	mesh.addSpring(Spring(2, 3, 4, 1));
+	mesh.addSpring(Spring(3, 0, 4, 1));
+
+	mesh.addSpring(Spring(0, 2, sqrt(32.0), 1));
+	mesh.addSpring(Spring(1, 3, sqrt(32.0), 1));
+
+	mesh.addSpring(Spring(2, 5, 4, 1));
+	mesh.addSpring(Spring(3, 4, 4, 1));
+	mesh.addSpring(Spring(4, 5, 4, 1));
+
+	mesh.addSpring(Spring(2, 4, sqrt(32.0), 1));
+	mesh.addSpring(Spring(3, 5, sqrt(32.0), 1));
+
+	mesh.addSpring(Spring(0, 5, 8, 1));
+	mesh.addSpring(Spring(1, 4, 8, 1));
+
+	// mesh.addMassPoint(MassPoint(vector3d(0, 2, 0), 0.01));
+	//	mesh.addMassPoint(MassPoint(vector3d(0, 0, 0), 0.01));
+	//mesh.addSpring(Spring(0,1,2,1));
+	///CONSTRAINTS ARE FAULTY
+	inte.addConstrainedDOF(0);
+	inte.addConstrainedDOF(1);
+	inte.initSolver();
+}
+
+
 int main(int argc, char** argv)
 {
 
@@ -190,26 +286,7 @@ int main(int argc, char** argv)
 
    printf("Press M to start");
    
-  mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 0.01));
-   mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 0.01));
-   mesh.addMassPoint(MassPoint(vector3d(2, -5, 0), 0.01));
-   mesh.addMassPoint(MassPoint(vector3d(-2, -5, 0), 0.01));
 
-   mesh.addSpring(Spring(0, 1, 4, 1));
-   mesh.addSpring(Spring(1, 2, 4, 1));
-   mesh.addSpring(Spring(2, 3, 4, 1));
-   mesh.addSpring(Spring(3, 0, 4, 1));
-
-   mesh.addSpring(Spring(0, 2, sqrt(32.0), 1));
-   mesh.addSpring(Spring(1, 3, sqrt(32.0), 1));
-
-   // mesh.addMassPoint(MassPoint(vector3d(0, 2, 0), 0.01));
-//	mesh.addMassPoint(MassPoint(vector3d(0, 0, 0), 0.01));
-	//mesh.addSpring(Spring(0,1,2,1));
-   ///CONSTRAINTS ARE FAULTY
-   inte.addConstrainedDOF(0);
-   inte.addConstrainedDOF(1);
-   inte.initSolver();
 
    //float** a = (float**)calloc(3, sizeof(float*));
    //a[0] = (float*)calloc(3, sizeof(float));
@@ -234,6 +311,8 @@ int main(int argc, char** argv)
 	  // printf("\n");
    //}
 
+   //initCloth();
+   initCloth2();
 
    glutTimerFunc(1000/60, timer, 60);
    glutDisplayFunc(display); 

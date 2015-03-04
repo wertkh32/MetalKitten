@@ -36,6 +36,7 @@ MassSpringMesh::getStiffnessWeightedLaplacian(float** A)
 		A[e.v1 * 3 + 1][e.v0 * 3 + 1] = -e.stiffness;
 		A[e.v1 * 3 + 2][e.v0 * 3 + 2] = -e.stiffness;
 	}
+
 }
 
 void

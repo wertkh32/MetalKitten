@@ -1,8 +1,8 @@
 #pragma once
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
-#define DAMPING 1
-#define MAX_ITERATION 10
+#define DAMPING 0.999
+#define MAX_ITERATION 5
 
 class MassSpringIntegrator
 {

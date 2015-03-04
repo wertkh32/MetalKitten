@@ -1,7 +1,7 @@
 #pragma once
 #include "includes.h"
 
-#define MAX_POINTS 100
+#define MAX_POINTS 200
 #define MAX_SPRINGS ((MAX_POINTS * (MAX_POINTS - 1)) >> 1)
 
 struct Spring

@@ -48,15 +48,24 @@ MassSpringIntegrator::initSolver()
 	mesh->getSystemMatrix(A);
 	mesh->getJ(J);
 
+	//for (int i = 0; i < dim; i++)
+	//{
+	//	printf("\n");
+	//	for (int j = 0; j < dim; j++)
+	//		printf("%f ", A[i][j]);
+	//}
+
+	//printf("\n");
+
 	MatrixOps::InverseMatrix(A, Ainv, dim);
 
 
-	for (int i = 0; i < dim; i++)
-	{
-		printf("\n");
-		for (int j = 0; j < dim; j++)
-			printf("%f ", Ainv[i][j]);
-	}
+	//for (int i = 0; i < dim; i++)
+	//{
+	//	printf("\n");
+	//	for (int j = 0; j < dim; j++)
+	//		printf("%f ", Ainv[i][j]);
+	//}
 
 	init_x();
 	init_d();
@@ -200,7 +209,7 @@ MassSpringIntegrator::timeStep()
 		v.y = x[i * 3 + 1];
 		v.z = x[i * 3 + 2];
 
-		printf("%f %f %f\n", v.x, v.y, v.z);
+		//printf("%f %f %f\n", v.x, v.y, v.z);
 	}
 
 	for (int i = 0; i < dim; i++)
