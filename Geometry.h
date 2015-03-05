@@ -51,6 +51,17 @@ struct Triangle : public Geometry
 	~Triangle(){}
 };
 
+struct Sphere : public Geometry
+{
+	vector3d& p;
+	float r;
+	Sphere(vector3d& _p, float _r) :p(_p), r(_r)
+	{
+		type = _SPHERE;
+	}
+	~Sphere(){}
+};
+
 struct AABB : public Geometry
 {
 	vector3d min, max;

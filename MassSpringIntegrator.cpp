@@ -124,9 +124,9 @@ MassSpringIntegrator::reset_constrained_x()
 void
 MassSpringIntegrator::addExtForce(int n, vector3d& f)
 {
-	fext[n * 3] = f.x;
-	fext[n * 3 + 1] = f.y;
-	fext[n * 3 + 2] = f.z;
+	fext[n * 3] += f.x;
+	fext[n * 3 + 1] += f.y;
+	fext[n * 3 + 2] += f.z;
 }
 
 void
@@ -161,11 +161,11 @@ void
 MassSpringIntegrator::timeStep()
 {
 	
-	float* f = collider.genCollisionForces(x, qn, qn_1);
+	//float* f = collider.genCollisionForces(x, qn, qn_1);
 
 	for (int i = 0; i < dim; i++)
 	{
-		fext[i] += f[i];
+		//fext[i] += f[i];
 		qn_1[i] = qn[i];
 		qn[i] = x[i];
 	}
@@ -197,9 +197,9 @@ MassSpringIntegrator::timeStep()
 
 		solve_x();
 
-		reset_constrained_x();
-		
 		collider.genCollisionForces(x, qn, qn_1);
+
+		reset_constrained_x();
 
 		solve_d();
 
@@ -216,6 +216,8 @@ MassSpringIntegrator::timeStep()
 
 		//printf("%f %f %f\n", v.x, v.y, v.z);
 	}
+
+	//float* f = collider.genCollisionForces(x, qn, qn_1);
 
 	for (int i = 0; i < dim; i++)
 		fext[i] = 0;

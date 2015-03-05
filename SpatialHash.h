@@ -3,7 +3,7 @@
 #include "Geometry.h"
 
 #define CELL_SIZE 3
-#define MAX_GEO_PER_CELL 20
+#define MAX_GEO_PER_CELL 30
 #define MAX_GEO 300
 #define MAX_OCCUPIED 1000
 #define DIM_X 50
