@@ -4,6 +4,8 @@
 #include "Collision.h"
 
 #define MAX_TRIANGLES 300
+#define EPSILON 0.01
+#define SPHERE_RADIUS 0.4
 
 class ClothCollider
 {

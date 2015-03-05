@@ -31,9 +31,7 @@ ClothCollider::genCollisionForces(float* cur_state, float* prev_state, float* pr
 					p1 = vector3d(prev_state[i * 3], prev_state[i * 3 + 1], prev_state[i * 3 + 2]),
 					p2 = vector3d(prev_prev_state[i * 3], prev_prev_state[i * 3 + 1], prev_prev_state[i * 3 + 2]);
 				     
-			//Line line = Line(p1, p0);
-			//its only triangles for now
-			Sphere sphere = Sphere(p0, 0.3);
+			Sphere sphere = Sphere(p0, SPHERE_RADIUS);
 
 			for (int j = 0; j < cell.size(); j++)
 			{
@@ -48,15 +46,10 @@ ClothCollider::genCollisionForces(float* cur_state, float* prev_state, float* pr
 
 				if (Collision::testTriangleSphere(*t, sphere, &hit))
 				{
-					//printf("Collided");
-					//vector3d corrected = (hit - p0) * mesh->getMassPoint(i).mass;
-					cur_state[i * 3] = prev_prev_state[i * 3];
-					cur_state[i * 3 + 1] = prev_prev_state[i * 3 + 1];
-					cur_state[i * 3 + 2] = prev_prev_state[i * 3 + 2];
-
-					//forces[i * 3] = corrected.x;
-					//forces[i * 3 + 1] = corrected.y;
-					//forces[i * 3 + 2] = corrected.z;
+					vector3d dir = (p2 - p0) * EPSILON;
+					cur_state[i * 3] = prev_prev_state[i * 3] + dir.x;
+					cur_state[i * 3 + 1] = prev_prev_state[i * 3 + 1] + dir.y;
+					cur_state[i * 3 + 2] = prev_prev_state[i * 3 + 2] + dir.z;
 				}
 			}
 
