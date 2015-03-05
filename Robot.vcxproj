@@ -16,6 +16,8 @@
     <ClCompile Include="bone.cpp" />
     <ClCompile Include="boundsAABB.cpp" />
     <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="ClothCollider.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ConjugateGradientSolver.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="HingeChain.cpp" />
@@ -40,11 +42,14 @@
     <ClInclude Include="bounds.h" />
     <ClInclude Include="boundsAABB.h" />
     <ClInclude Include="Chain.h" />
+    <ClInclude Include="ClothCollider.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="ConjugateGradientSolver.h" />
     <ClInclude Include="ConstrainedRows.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="GenMatrix.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="GUIUtils.h" />
     <ClInclude Include="HingeChain.h" />
     <ClInclude Include="HingeJointBone.h" />
@@ -77,7 +82,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

@@ -1,7 +1,7 @@
 #include "MassSpringIntegrator.h"
 
 
-MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh)
+MassSpringIntegrator::MassSpringIntegrator(MassSpringMesh* _mesh) : mesh(_mesh), collider(_mesh)
 {
 
 }
@@ -14,6 +14,7 @@ MassSpringIntegrator::initSolver()
 	dim = n * 3;
 	dim_s = s * 3;
 
+	collider.initCollider();
 
 	d = (float*)calloc(dim_s, sizeof(float));
 
@@ -159,10 +160,12 @@ MassSpringIntegrator::solve_d()
 void
 MassSpringIntegrator::timeStep()
 {
-
+	
+	float* f = collider.genCollisionForces(x, qn, qn_1);
 
 	for (int i = 0; i < dim; i++)
 	{
+		fext[i] += f[i];
 		qn_1[i] = qn[i];
 		qn[i] = x[i];
 	}
@@ -195,6 +198,8 @@ MassSpringIntegrator::timeStep()
 		solve_x();
 
 		reset_constrained_x();
+		
+		collider.genCollisionForces(x, qn, qn_1);
 
 		solve_d();
 

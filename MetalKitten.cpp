@@ -10,7 +10,7 @@
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
 #include "MassSpringIntegrator.h"
-
+#include "Collision.h"
 
 static int shoulder = 0, elbow = 0;
 GUIUtils gui;
@@ -124,6 +124,7 @@ void display(void)
 
 			   //chain.render();
 			   mesh.render();
+			   inte.collider.render();
 
 		   drawfloor();
 		   gui.renderCursor();
@@ -195,6 +196,9 @@ void initCloth2()
 		}
 	}
 
+
+
+
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < n-1; j++)
@@ -233,8 +237,25 @@ void initCloth2()
 
 	inte.addConstrainedDOF(0);
 	//inte.addConstrainedDOF(n-1);
-	//inte.addConstrainedDOF(n * n -1);
-	inte.addConstrainedDOF(n * n - n);
+	inte.addConstrainedDOF(n * n -1);
+	//inte.addConstrainedDOF(n * n - n);
+
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		for (int j = 0; j < n - 1; j++)
+		{
+			int a = i * n + j,
+				b = (i + 1) * n + j,
+				c = (i + 1) * n + j + 1,
+				d = i * n + j + 1;
+
+			inte.collider.addTriangle(a, b, d);
+			inte.collider.addTriangle(d, b, c);
+		}
+	}
+
+
 	inte.initSolver();
 
 }
@@ -314,6 +335,14 @@ int main(int argc, char** argv)
    //}
 
    //initCloth();
+
+   vector3d v;
+   if (Collision::testLineTriangle(Line(vector3d(0, 1, 0), vector3d(0, -1, 0)), Triangle(vector3d(-1, 0, 1), vector3d(1, 0, 1), vector3d(0, 0, -1)),&v))
+	  printf("%f %f %f",v.x,v.y,v.z);
+
+   //if (Collision::testLineTriangle(Line(vector3d(0, 1, 0), vector3d(0, -1, 0)), Triangle(vector3d(-1, 0, 1), vector3d(0, 0, -1), vector3d(1, 0, 1))))
+	  // printf("Helloo");
+
    initCloth2();
 
    glutTimerFunc(1000/60, timer, 60);

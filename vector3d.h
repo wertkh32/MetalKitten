@@ -21,13 +21,18 @@ public:
 	float    mag();
 
 	vector3d& operator=(vector3d&); //ensure well defined assignment
-	vector3d operator*(float);		//scalar mul
-	vector3d operator*(vector3d& v);//scalar mul
-	vector3d operator/(float);		//scalar divide
-	vector3d operator+(vector3d& v);//add
-	vector3d operator-(vector3d& v);//subtract
+	vector3d operator*(const float);		//scalar mul
+	vector3d operator*(const vector3d& v);//scalar mul
+	vector3d operator/(const float);		//scalar divide
+	vector3d operator+(const vector3d& v);//add
+	vector3d operator-(const vector3d& v);//subtract
 	vector3d operator-();			 //inverse
 	vector3d operator~();			 //unit
+	
+	void	 operator+= (vector3d& v);//add
+	void	 operator-= (vector3d& v);//add
+	void	 operator*= (vector3d& v);//add
+	void	 operator/= (vector3d& v);//add
 
 	static vector3d lerp(vector3d& start, vector3d& end, float t);
 	static vector3d nlerp(vector3d& start, vector3d& end, float t);
@@ -69,22 +74,22 @@ vector3d vector3d::operator*(float k){
 }
 
 inline
-vector3d vector3d::operator*(vector3d& v){
+vector3d vector3d::operator*(const vector3d& v){
 	return vector3d(x*v.x,y*v.y,z*v.z);
 }
 
 inline
-vector3d vector3d::operator/(float k){
+vector3d vector3d::operator/(const float k){
 	return vector3d(x/k,y/k,z/k);
 }
 
 inline
-vector3d vector3d::operator+(vector3d& v){
+vector3d vector3d::operator+(const vector3d& v){
 	return vector3d(x+v.x,y+v.y,z+v.z);
 }
 
 inline
-vector3d vector3d::operator-(vector3d& v){
+vector3d vector3d::operator-(const vector3d& v){
 	return vector3d(x-v.x,y-v.y,z-v.z);
 }
 
@@ -96,4 +101,36 @@ vector3d vector3d::operator-(){
 inline
 float vector3d::mag(){
 	return sqrt(x*x+y*y+z*z);
+}
+
+inline
+void vector3d::operator+= (vector3d& v)
+{
+	x += v.x;
+	y += v.y;
+	z += v.z;
+}
+
+inline
+void vector3d::operator-= (vector3d& v)
+{
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+}
+
+inline
+void vector3d::operator*= (vector3d& v)
+{
+	x *= v.x;
+	y *= v.y;
+	z *= v.z;
+}
+
+inline
+void vector3d::operator/= (vector3d& v)
+{
+	x /= v.x;
+	y /= v.y;
+	z /= v.z;
 }

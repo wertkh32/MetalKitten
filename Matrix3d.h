@@ -15,6 +15,7 @@ public:
 	Matrix3d(float a00,float a01,float a02,
 			 float a10,float a11,float a12,
 			 float a20,float a21,float a22);
+	Matrix3d(vector3d& c0, vector3d& c1, vector3d& c2);
 	inline Matrix3d transpose();
 	inline float determinant();
 	inline Matrix3d operator*(const Matrix3d&);

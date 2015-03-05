@@ -1,6 +1,7 @@
 #pragma once
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
+#include "ClothCollider.h"
 #define DAMPING 0.9995
 #define MAX_ITERATION 5
 
@@ -41,6 +42,8 @@ class MassSpringIntegrator
 	void reset_constrained_x();
 
 public:
+	ClothCollider collider;
+
 	MassSpringIntegrator(MassSpringMesh* _mesh);
 
 	void addConstrainedDOF(int n){ constraints.push(n); }

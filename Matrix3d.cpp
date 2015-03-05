@@ -31,6 +31,14 @@ Matrix3d::Matrix3d(float a00,float a01,float a02,
 	
 }
 
+
+Matrix3d::Matrix3d(vector3d& c0, vector3d& c1, vector3d& c2)
+{
+	mat[0][0] = c0.x; mat[0][1] = c1.x; mat[0][2] = c2.x;
+	mat[1][0] = c0.y; mat[1][1] = c1.y; mat[1][2] = c2.y;
+	mat[2][0] = c0.z; mat[2][1] = c1.z; mat[2][2] = c2.z;
+}
+
 Matrix3d Matrix3d::skew(vector3d& v){
 	return Matrix3d(0, -v.z, v.y,
 					v.z, 0, -v.x,
