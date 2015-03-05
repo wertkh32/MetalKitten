@@ -13,7 +13,7 @@ ClothCollider::initCollider()
 }
 
 float*
-ClothCollider::genCollisionForces(float* cur_state, float* prev_state, float* prev_prev_state)
+ClothCollider::applyCollisionConstraint(float* cur_state, float* prev_state, float* prev_prev_state)
 {
 	for (int i = 0; i < n * 3; i++)
 		forces[i] = 0;

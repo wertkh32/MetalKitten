@@ -4,6 +4,7 @@
 #include "ClothCollider.h"
 #define DAMPING 0.9995
 #define MAX_ITERATION 5
+#define COLLISION
 
 class MassSpringIntegrator
 {

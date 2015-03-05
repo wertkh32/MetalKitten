@@ -27,7 +27,7 @@ public:
 		triangles.push(t);
 		hashtable.addGeometry(t);
 	}
-	float* genCollisionForces(float* cur_state, float* prev_state, float* prev_prev_state);
+	float* applyCollisionConstraint(float* cur_state, float* prev_state, float* prev_prev_state);
 	void render();
 
 	~ClothCollider();

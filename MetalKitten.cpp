@@ -233,11 +233,21 @@ void initCloth2()
 			mesh.addSpring(Spring(i * n + j, (i + 2) * n + j, step * 2, stiff));
 	}
 
+	//tissue paper
+	//inte.addConstrainedDOF(n * n / 2);
+	
+	//blanket
+	//inte.addConstrainedDOF(0);
+	//inte.addConstrainedDOF(n * n - 1);
 
-
+	//towel
 	inte.addConstrainedDOF(0);
+	inte.addConstrainedDOF(n * n - n);
+	
 	//inte.addConstrainedDOF(n-1);
-	inte.addConstrainedDOF(n * n -1);
+	
+	
+	//inte.addConstrainedDOF(n * n -1);
 	//inte.addConstrainedDOF(n * n - n);
 
 
@@ -290,7 +300,7 @@ void initCloth()
 	// mesh.addMassPoint(MassPoint(vector3d(0, 2, 0), 0.01));
 	//	mesh.addMassPoint(MassPoint(vector3d(0, 0, 0), 0.01));
 	//mesh.addSpring(Spring(0,1,2,1));
-	///CONSTRAINTS ARE FAULTY
+
 	inte.addConstrainedDOF(0);
 	inte.addConstrainedDOF(1);
 	inte.initSolver();

@@ -160,12 +160,9 @@ MassSpringIntegrator::solve_d()
 void
 MassSpringIntegrator::timeStep()
 {
-	
-	//float* f = collider.genCollisionForces(x, qn, qn_1);
 
 	for (int i = 0; i < dim; i++)
 	{
-		//fext[i] += f[i];
 		qn_1[i] = qn[i];
 		qn[i] = x[i];
 	}
@@ -197,8 +194,9 @@ MassSpringIntegrator::timeStep()
 
 		solve_x();
 
-		collider.genCollisionForces(x, qn, qn_1);
-
+		#ifdef COLLISION
+		collider.applyCollisionConstraint(x, qn, qn_1);
+		#endif
 		reset_constrained_x();
 
 		solve_d();
@@ -216,8 +214,6 @@ MassSpringIntegrator::timeStep()
 
 		//printf("%f %f %f\n", v.x, v.y, v.z);
 	}
-
-	//float* f = collider.genCollisionForces(x, qn, qn_1);
 
 	for (int i = 0; i < dim; i++)
 		fext[i] = 0;
