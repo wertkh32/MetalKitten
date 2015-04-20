@@ -137,11 +137,15 @@ Collision::closestPtPointTriangle(vector3d& p, Triangle& t)
 }
 
 bool
-Collision::testTriangleSphere(Triangle& t, Sphere& s, vector3d* out)
+Collision::testTriangleSphere(Triangle& t, Sphere& s, CollisionInfo* info)
 {
 	vector3d p = closestPtPointTriangle(s.p, t);
 	vector3d v = s.p - p;
-	*out = v;
-		
+	vector3d n = ((t.p2 - t.p0).cross(t.p1 - t.p0)).unit();
+
+	if (n.dot(v) > 0)info->norm = n;
+	else info->norm = -n;
+	info->hits.push(p);
+	info->norm = info->norm *( s.r - v.mag() );
 	return  v.dot(v) <= s.r * s.r;
 }

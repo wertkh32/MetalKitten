@@ -42,14 +42,18 @@ ClothCollider::applyCollisionConstraint(float* cur_state, float* prev_state, flo
 					&(t->p2) == &(mesh->getMassPoint(i).vertex))
 					continue;
 
-				vector3d hit;
+				CollisionInfo info;
 
-				if (Collision::testTriangleSphere(*t, sphere, &hit))
+				if (Collision::testTriangleSphere(*t, sphere, &info))
 				{
-					vector3d dir = (p2 - p0) * EPSILON;
-					cur_state[i * 3] = prev_prev_state[i * 3] + dir.x;
-					cur_state[i * 3 + 1] = prev_prev_state[i * 3 + 1] + dir.y;
-					cur_state[i * 3 + 2] = prev_prev_state[i * 3 + 2] + dir.z;
+					vector3d dir = info.norm * 1.001;
+					cur_state[i * 3] += dir.x;
+					cur_state[i * 3 + 1] += dir.y;
+					cur_state[i * 3 + 2] += dir.z;
+
+					prev_state[i * 3] = prev_prev_state[i * 3];
+					prev_state[i * 3 + 1] = prev_prev_state[i * 3 + 1];
+					prev_state[i * 3 + 2] = prev_prev_state[i * 3 + 2];
 				}
 			}
 

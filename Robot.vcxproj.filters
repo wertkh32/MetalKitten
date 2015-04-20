@@ -63,6 +63,15 @@
       <Filter>CollisionDetection</Filter>
     </ClCompile>
     <ClCompile Include="ClothCollider.cpp" />
+    <ClCompile Include="TetrahedralMesh.cpp">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Tet.cpp">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="PolarDecompose.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -150,6 +159,18 @@
       <Filter>CollisionDetection</Filter>
     </ClInclude>
     <ClInclude Include="ClothCollider.h" />
+    <ClInclude Include="TetrahedralMesh.h">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Tet.h">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="PolarDecompose.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -181,6 +202,9 @@
     </Filter>
     <Filter Include="CollisionDetection\Geometry">
       <UniqueIdentifier>{385d3d72-2bb9-4760-8a52-474e5db5e24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectiveDynamics">
+      <UniqueIdentifier>{36e520d9-d1fc-4230-b732-e1aee823de47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

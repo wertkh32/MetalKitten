@@ -234,15 +234,15 @@ void initCloth2()
 	}
 
 	//tissue paper
-	//inte.addConstrainedDOF(n * n / 2);
+	inte.addConstrainedDOF(n * n / 2);
 	
 	//blanket
 	//inte.addConstrainedDOF(0);
 	//inte.addConstrainedDOF(n * n - 1);
 
 	//towel
-	inte.addConstrainedDOF(0);
-	inte.addConstrainedDOF(n * n - n);
+	//inte.addConstrainedDOF(0);
+	//inte.addConstrainedDOF(n * n - n);
 	
 	//inte.addConstrainedDOF(n-1);
 	

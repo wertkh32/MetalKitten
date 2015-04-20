@@ -5,7 +5,7 @@
 
 #define MAX_TRIANGLES 300
 #define EPSILON 0.01
-#define SPHERE_RADIUS 0.4
+#define SPHERE_RADIUS 0.3
 
 class ClothCollider
 {

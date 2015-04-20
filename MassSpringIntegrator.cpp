@@ -170,13 +170,13 @@ MassSpringIntegrator::timeStep()
 	for (int i = 0; i < dim; i++)
 		temp[i] = -fext[i] * DT * DT;
 
-	for (int i = 0; i < n; i++)
+	/*for (int i = 0; i < n; i++)
 	{
 		float mass = mesh->getMassPoint(i).mass;
 		temp[i * 3] += mass * ((1 + DAMPING) * qn[i * 3] - DAMPING * qn_1[i * 3]);
 		temp[i * 3 + 1] += mass * ((1 + DAMPING) * qn[i * 3 + 1] - DAMPING * qn_1[i * 3 + 1]);
 		temp[i * 3 + 2] += mass * ((1 + DAMPING) * qn[i * 3 + 2] - DAMPING * qn_1[i * 3 + 2]);
-	}
+	}*/
 
 	int counter = 0;
 
@@ -191,6 +191,15 @@ MassSpringIntegrator::timeStep()
 			b[i] *= DT *DT;
 			b[i] += temp[i];
 		}
+
+		for (int i = 0; i < n; i++)
+		{
+			float mass = mesh->getMassPoint(i).mass;
+			b[i * 3] += mass * ((1 + DAMPING) * qn[i * 3] - DAMPING * qn_1[i * 3]);
+			b[i * 3 + 1] += mass * ((1 + DAMPING) * qn[i * 3 + 1] - DAMPING * qn_1[i * 3 + 1]);
+			b[i * 3 + 2] += mass * ((1 + DAMPING) * qn[i * 3 + 2] - DAMPING * qn_1[i * 3 + 2]);
+		}
+
 
 		solve_x();
 

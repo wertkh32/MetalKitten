@@ -28,10 +28,13 @@
     <ClCompile Include="Matrix3d.cpp" />
     <ClCompile Include="Matrix4d.cpp" />
     <ClCompile Include="MatrixOps.cpp" />
+    <ClCompile Include="PolarDecompose.cpp" />
     <ClCompile Include="quatn.cpp" />
     <ClCompile Include="MetalKitten.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
     <ClCompile Include="SpatialHash.cpp" />
+    <ClCompile Include="Tet.cpp" />
+    <ClCompile Include="TetrahedralMesh.cpp" />
     <ClCompile Include="vector3d.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -60,8 +63,12 @@
     <ClInclude Include="Matrix3d.h" />
     <ClInclude Include="Matrix4d.h" />
     <ClInclude Include="MatrixOps.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="PolarDecompose.h" />
     <ClInclude Include="quatn.h" />
     <ClInclude Include="SpatialHash.h" />
+    <ClInclude Include="Tet.h" />
+    <ClInclude Include="TetrahedralMesh.h" />
     <ClInclude Include="vector3d.h" />
     <ClInclude Include="QuickArray.h" />
   </ItemGroup>
