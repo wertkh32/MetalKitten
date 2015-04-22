@@ -63,14 +63,14 @@
       <Filter>CollisionDetection</Filter>
     </ClCompile>
     <ClCompile Include="ClothCollider.cpp" />
-    <ClCompile Include="TetrahedralMesh.cpp">
-      <Filter>ProjectiveDynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="Tet.cpp">
-      <Filter>ProjectiveDynamics</Filter>
-    </ClCompile>
     <ClCompile Include="PolarDecompose.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="TetMesh.cpp">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectiveDynamicsSolver.cpp">
+      <Filter>ProjectiveDynamics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,17 +159,17 @@
       <Filter>CollisionDetection</Filter>
     </ClInclude>
     <ClInclude Include="ClothCollider.h" />
-    <ClInclude Include="TetrahedralMesh.h">
-      <Filter>ProjectiveDynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="Tet.h">
-      <Filter>ProjectiveDynamics</Filter>
-    </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>ProjectiveDynamics</Filter>
     </ClInclude>
     <ClInclude Include="PolarDecompose.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="TetMesh.h">
+      <Filter>ProjectiveDynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectiveDynamicsSolver.h">
+      <Filter>ProjectiveDynamics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 struct Node
 {
 	vector3d position;
+	float mass;
 	Node();
 	~Node();
 };
