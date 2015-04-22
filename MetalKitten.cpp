@@ -10,11 +10,14 @@
 #include "MatrixOps.h"
 #include "MassSpringMesh.h"
 #include "MassSpringIntegrator.h"
+#include "ProjectiveDynamicsSolver.h"
+
 #include "Collision.h"
 
 static int shoulder = 0, elbow = 0;
 GUIUtils gui;
 bool start=false;
+float t = 0;
 
 vector3d arr[7] = { vector3d(0, 0, 0), vector3d(0, 3, 0), vector3d(0, 6, 0), vector3d(0, 9, 0), vector3d(0, 12, 0), vector3d(0, 15, 0), vector3d(0, 18, 0) };
 vector3d axes[6] = { vector3d(1, 0, 0), vector3d(0, 1, 0), vector3d(0, 0, 1), vector3d(1, 0, 0), vector3d(0, 1, 0), vector3d(0, 0, 1) };
@@ -26,6 +29,8 @@ IKSolver solver(chain);
 MassSpringMesh mesh;
 MassSpringIntegrator inte(&mesh);
 
+TetMesh tetmesh;
+ProjectiveDynamicsSolver* psolver;
 
 void lettherebelight(){
 
@@ -114,17 +119,21 @@ void display(void)
 
 		   if (start)
 		   {
-			  for (int i = 0; i < mesh.getNoMassPoints(); i++)
-				   inte.addExtForce(i, vector3d(0, 9.81 * mesh.getMassPoint(i).mass, 0));
-			   inte.timeStep();
+			  //for (int i = 0; i < mesh.getNoMassPoints(); i++)
+				//   inte.addExtForce(i, vector3d(0, 9.81 * mesh.getMassPoint(i).mass, 0));
+			  // inte.timeStep();
+			 
+			   psolver->timestep();
 			   //start = !start;
 		   }
+
+		   tetmesh.renderMesh();
 			   //solver.solveByJacobianInverse(gui.getCursorPos());
 			   //solver.solveByCCD(gui.getCursorPos());
 
 			   //chain.render();
-			   mesh.render();
-			   inte.collider.render();
+			  // mesh.render();
+			  // inte.collider.render();
 
 		   drawfloor();
 		   gui.renderCursor();
@@ -159,6 +168,28 @@ void keyboard (unsigned char key, int x, int y)
       case 27:
          exit(0);
          break;
+
+	  case 'w':
+		  gui.getCameraPos().z -= 1;
+		  break;
+	  case 's':
+		  gui.getCameraPos().z += 1;
+		  break;
+	  case 'd':
+		  gui.getCameraPos().x += 1;
+		  break;
+	  case 'a':
+		  gui.getCameraPos().x -= 1;
+		  break;
+	  case 'e':
+		  gui.getCameraPos().y -= 1;
+		  break;
+	  case 'r':
+		  gui.getCameraPos().y += 1;
+		  break;
+	  case ' ':
+		  if (start)
+			  psolver->setExtForce(17, vector3d(50,0, 0));
       default:
          break;
    }
@@ -270,40 +301,50 @@ void initCloth2()
 
 }
 
-void initCloth()
+void initTetMesh()
 {
-	mesh.addMassPoint(MassPoint(vector3d(-2, 2, 0), 0.01));
-	mesh.addMassPoint(MassPoint(vector3d(2, 2, 0), 0.01));
-	mesh.addMassPoint(MassPoint(vector3d(2, -2, 0), 0.01));
-	mesh.addMassPoint(MassPoint(vector3d(-2, -2, 0), 0.01));
-	mesh.addMassPoint(MassPoint(vector3d(2, -6, 0), 0.01));
-	mesh.addMassPoint(MassPoint(vector3d(-2, -6, 0), 0.01));
+	int n = 3;
+	int m = 3;
 
-	mesh.addSpring(Spring(0, 1, 4, 1));
-	mesh.addSpring(Spring(1, 2, 4, 1));
-	mesh.addSpring(Spring(2, 3, 4, 1));
-	mesh.addSpring(Spring(3, 0, 4, 1));
+	for (int k = 0; k<2; k++)
+	for (int i = 0; i<n; i++)
+	for (int j = 0; j<m; j++)
+	{
+		tetmesh.addNode( Node(vector3d(i, k, j), 1) );
+	
 
-	mesh.addSpring(Spring(0, 2, sqrt(32.0), 1));
-	mesh.addSpring(Spring(1, 3, sqrt(32.0), 1));
+	}
 
-	mesh.addSpring(Spring(2, 5, 4, 1));
-	mesh.addSpring(Spring(3, 4, 4, 1));
-	mesh.addSpring(Spring(4, 5, 4, 1));
+	for (int i = 0; i<n - 1; i++)
+	for (int j = 0; j<m - 1; j++)
+	{
+		//int nextbase = i * m + j;
+		//int nexttop = m * n + i * m + j;
+		int tet1[4] = { i * m + j, (i + 1) * m + j, i * m + (j + 1), m * n + i * m + j };
+		int tet2[4] = { (i + 1) * m + (j + 1), (i + 1) * m + j, i * m + (j + 1), m * n + (i + 1) * m + (j + 1) };
+		int tet3[4] = { m * n + i * m + j, m * n + (i + 1) * m + j, m * n + (i + 1) * m + (j + 1), (i + 1) * m + j };
+		int tet4[4] = { m * n + i * m + j, m * n + i * m + (j + 1), m * n + (i + 1) * m + (j + 1), i * m + (j + 1) };
+		int tet5[4] = { m * n + i * m + j, m * n + (i + 1) * m + (j + 1), i * m + (j + 1), (i + 1) * m + j };
 
-	mesh.addSpring(Spring(2, 4, sqrt(32.0), 1));
-	mesh.addSpring(Spring(3, 5, sqrt(32.0), 1));
+		tetmesh.addTet(tet1, 100);
+		tetmesh.addTet(tet2, 100);
+		tetmesh.addTet(tet3, 100);
+		tetmesh.addTet(tet4, 100);
+		tetmesh.addTet(tet5, 100);
+		
+	}
 
-	mesh.addSpring(Spring(0, 5, 8, 1));
-	mesh.addSpring(Spring(1, 4, 8, 1));
+	psolver = new ProjectiveDynamicsSolver(&tetmesh);
+	psolver->setContrainedNode(0,true);
+	psolver->setContrainedNode(1, true);
+	psolver->setContrainedNode(2, true);
 
-	// mesh.addMassPoint(MassPoint(vector3d(0, 2, 0), 0.01));
-	//	mesh.addMassPoint(MassPoint(vector3d(0, 0, 0), 0.01));
-	//mesh.addSpring(Spring(0,1,2,1));
+	psolver->setContrainedNode(9, true);
+	psolver->setContrainedNode(10, true);
+	psolver->setContrainedNode(11, true);
 
-	inte.addConstrainedDOF(0);
-	inte.addConstrainedDOF(1);
-	inte.initSolver();
+	//psolver->setPosition(9, tetmesh.getRestPosition(9) + vector3d(0, 1, 0));
+	psolver->init();
 }
 
 
@@ -346,14 +387,19 @@ int main(int argc, char** argv)
 
    //initCloth();
 
-   vector3d v;
-   if (Collision::testLineTriangle(Line(vector3d(0, 1, 0), vector3d(0, -1, 0)), Triangle(vector3d(-1, 0, 1), vector3d(1, 0, 1), vector3d(0, 0, -1)),&v))
-	  printf("%f %f %f",v.x,v.y,v.z);
+   initTetMesh();
+
+
+  // vector3d v;
+   //if (Collision::testLineTriangle(Line(vector3d(0, 1, 0), vector3d(0, -1, 0)), Triangle(vector3d(-1, 0, 1), vector3d(1, 0, 1), vector3d(0, 0, -1)),&v))
+	//  printf("%f %f %f",v.x,v.y,v.z);
 
    //if (Collision::testLineTriangle(Line(vector3d(0, 1, 0), vector3d(0, -1, 0)), Triangle(vector3d(-1, 0, 1), vector3d(0, 0, -1), vector3d(1, 0, 1))))
 	  // printf("Helloo");
 
-   initCloth2();
+   //initCloth2();
+
+
 
    glutTimerFunc(1000/60, timer, 60);
    glutDisplayFunc(display); 

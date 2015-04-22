@@ -33,7 +33,58 @@ TetMesh::getRotation(int tetindex, Matrix3d& Ds)
 	Matrix3d R, S;
 
 	PolarDecompose::compute(F, R, S);
+
+	return R;
 }
+
+void
+TetMesh::renderTet(int tetindex)
+{
+	Tet& t = tets[tetindex];
+
+	int i0 = t.node[0];
+	int i1 = t.node[1];
+	int i2 = t.node[2];
+	int i3 = t.node[3];
+
+	glPushMatrix();
+
+	glLineWidth(3.0);
+	glBegin(GL_LINES);
+	glVertex3fv(nodes[i3].position.coords);
+	glVertex3fv(nodes[i0].position.coords);
+
+	glVertex3fv(nodes[i3].position.coords);
+	glVertex3fv(nodes[i1].position.coords);
+
+	glVertex3fv(nodes[i3].position.coords);
+	glVertex3fv(nodes[i2].position.coords);
+
+
+	glVertex3fv(nodes[i0].position.coords);
+	glVertex3fv(nodes[i1].position.coords);
+
+	glVertex3fv(nodes[i1].position.coords);
+	glVertex3fv(nodes[i2].position.coords);
+
+	glVertex3fv(nodes[i2].position.coords);
+	glVertex3fv(nodes[i0].position.coords);
+
+	glEnd();
+
+
+	glPopMatrix();
+}
+
+void
+TetMesh::renderMesh()
+{
+	for (int i = 0; i < getNumTets(); i++)
+	{
+		renderTet(i);
+	}
+}
+
 
 TetMesh::~TetMesh()
 {

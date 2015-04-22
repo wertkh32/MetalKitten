@@ -2,7 +2,7 @@
 #include "includes.h"
 #include "Matrix3d.h"
 
-#define TOLERANCE 0.01
+#define TOLERANCE 0.001
 class PolarDecompose
 {
 public:

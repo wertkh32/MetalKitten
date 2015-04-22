@@ -14,7 +14,7 @@ struct Tet
 	float weight;
 	float volume;
 	Matrix3d Dm;
-	
+	Tet(){};
 	Tet(int _n1, int _n2, int _n3, int _n4, float _weight, float _volume, Matrix3d& _Dm) : Dm(_Dm)
 	{
 		weight = _weight;
@@ -59,6 +59,17 @@ public:
 		tets.push(Tet(t1, t2, t3, t4, weight,vol,Dm));
 	}
 
+	void addTet(int t[4], float weight)
+	{
+		Matrix3d Dm = Matrix3d(restpos[t[0]].x - restpos[t[3]].x, restpos[t[1]].x - restpos[t[3]].x, restpos[t[2]].x - restpos[t[3]].x,
+							   restpos[t[0]].y - restpos[t[3]].y, restpos[t[1]].y - restpos[t[3]].y, restpos[t[2]].y - restpos[t[3]].y,
+							   restpos[t[0]].z - restpos[t[3]].z, restpos[t[1]].z - restpos[t[3]].z, restpos[t[2]].z - restpos[t[3]].z);
+
+		float vol = 1.0 / 6.0 * fabs(Dm.determinant());
+
+		tets.push(Tet(t[0], t[1], t[2], t[3], weight, vol, Dm));
+	}
+
 	Node& getNode(int index)
 	{
 		return nodes[index]; 
@@ -69,6 +80,10 @@ public:
 		return tets[index];
 	}
 
+	vector3d& getRestPosition(int index)
+	{
+		return restpos[index];
+	}
 
 	int getNumNodes()
 	{
@@ -83,6 +98,9 @@ public:
 	void getTransforms(int tetindex, Matrix3d& Ds, Matrix3d& F, Matrix3d& R, Matrix3d& S);
 
 	Matrix3d getRotation(int tetindex, Matrix3d& Ds);
+
+	void renderTet(int tetindex);
+	void renderMesh();
 
 	TetMesh();
 	~TetMesh();
