@@ -100,14 +100,14 @@ ProjectiveDynamicsSolver::init()
 
 	MatrixOps::InverseMatrix(A, Ainv, numdof);
 
-	for (int i = 0; i < numdof; i++)
-	{
-		for (int j = 0; j < numdof; j++)
-		{
-			printf("%f ", Ainv[i][j]);
-		}
-		printf("\n");
-	}
+	//for (int i = 0; i < numdof; i++)
+	//{
+	//	for (int j = 0; j < numdof; j++)
+	//	{
+			//printf("%f ", Ainv[i][j]);
+	//	}
+		//printf("\n");
+	//}
 
 	for (int i = 0; i < numdof; i++)
 		v[i] = 0;

@@ -32,6 +32,9 @@ MassSpringIntegrator inte(&mesh);
 TetMesh tetmesh;
 ProjectiveDynamicsSolver* psolver;
 
+#define DIM 6
+
+
 void lettherebelight(){
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -189,7 +192,20 @@ void keyboard (unsigned char key, int x, int y)
 		  break;
 	  case ' ':
 		  if (start)
-			  psolver->setExtForce(17, vector3d(50,0, 0));
+		  {
+			  int end = (DIM + 1) * (DIM + 1);
+			  int start = end - (DIM + 1) - 1;
+			  int end2 = end * 2;
+			  int start2 = end2 - (DIM + 1) - 1;
+
+			  for (int i = start; i<end; i++)
+				  psolver->setExtForce(i, vector3d(0, 50, 0));
+
+			  for (int i = start2; i<end2; i++)
+				  psolver->setExtForce(i, vector3d(0, 50, 0));
+
+			 
+		  }
       default:
          break;
    }
@@ -301,10 +317,11 @@ void initCloth2()
 
 }
 
+
 void initTetMesh()
 {
-	int n = 3;
-	int m = 3;
+	int n = DIM + 1;
+	int m = DIM + 1;
 
 	for (int k = 0; k<2; k++)
 	for (int i = 0; i<n; i++)
@@ -326,22 +343,21 @@ void initTetMesh()
 		int tet4[4] = { m * n + i * m + j, m * n + i * m + (j + 1), m * n + (i + 1) * m + (j + 1), i * m + (j + 1) };
 		int tet5[4] = { m * n + i * m + j, m * n + (i + 1) * m + (j + 1), i * m + (j + 1), (i + 1) * m + j };
 
-		tetmesh.addTet(tet1, 100);
-		tetmesh.addTet(tet2, 100);
-		tetmesh.addTet(tet3, 100);
-		tetmesh.addTet(tet4, 100);
-		tetmesh.addTet(tet5, 100);
+		tetmesh.addTet(tet1, 10000);
+		tetmesh.addTet(tet2, 10000);
+		tetmesh.addTet(tet3, 10000);
+		tetmesh.addTet(tet4, 10000);
+		tetmesh.addTet(tet5, 10000);
 		
 	}
 
 	psolver = new ProjectiveDynamicsSolver(&tetmesh);
-	psolver->setContrainedNode(0,true);
-	psolver->setContrainedNode(1, true);
-	psolver->setContrainedNode(2, true);
+	
+	for (int i = 0; i<DIM + 1; i++)
+		psolver->setContrainedNode(i,true);
 
-	psolver->setContrainedNode(9, true);
-	psolver->setContrainedNode(10, true);
-	psolver->setContrainedNode(11, true);
+	for (int i = (DIM + 1) * (DIM + 1); i<(DIM + 1) * (DIM + 1) + DIM + 1; i++)
+		psolver->setContrainedNode(i, true);
 
 	//psolver->setPosition(9, tetmesh.getRestPosition(9) + vector3d(0, 1, 0));
 	psolver->init();

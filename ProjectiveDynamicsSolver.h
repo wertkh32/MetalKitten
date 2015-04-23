@@ -2,8 +2,8 @@
 #include  "TetMesh.h"
 #include "MatrixOps.h"
 
-#define MAX_ITERATIONS 20
-#define DAMPING 0.99
+#define MAX_ITERATIONS 10
+#define DAMPING 0.98
 
 class ProjectiveDynamicsSolver
 {
