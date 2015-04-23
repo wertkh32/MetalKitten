@@ -32,7 +32,7 @@ MassSpringIntegrator inte(&mesh);
 TetMesh tetmesh;
 ProjectiveDynamicsSolver* psolver;
 
-#define DIM 6
+#define DIM 5
 
 
 void lettherebelight(){
@@ -125,7 +125,8 @@ void display(void)
 			  //for (int i = 0; i < mesh.getNoMassPoints(); i++)
 				//   inte.addExtForce(i, vector3d(0, 9.81 * mesh.getMassPoint(i).mass, 0));
 			  // inte.timeStep();
-			 
+			   for (int i = 0; i < tetmesh.getNumNodes(); i++)
+					psolver->addExtForce(i, vector3d(0, -9.81 * tetmesh.getNode(i).mass, 0));
 			   psolver->timestep();
 			   //start = !start;
 		   }
@@ -201,7 +202,7 @@ void keyboard (unsigned char key, int x, int y)
 			  for (int i = start; i<end; i++)
 				  psolver->setExtForce(i, vector3d(0, 50, 0));
 
-			  for (int i = start2; i<end2; i++)
+			  for (int i = start2; i<end2 ; i++)
 				  psolver->setExtForce(i, vector3d(0, 50, 0));
 
 			 

@@ -7,18 +7,18 @@ ProjectiveDynamicsSolver::ProjectiveDynamicsSolver(TetMesh* _tetmesh) : tetmesh(
 	numdof = numnodes * 3;
 
 
-	M = (float**)calloc(numdof,sizeof(float*));
-	LTL = (float**)calloc(numdof,sizeof(float*));
-	A = (float**)calloc(numdof, sizeof(float*));
-	Ainv = (float**)calloc(numdof, sizeof(float*));
+	M = (float**)calloc(numnodes, sizeof(float*));
+	LTL = (float**)calloc(numnodes, sizeof(float*));
+	A = (float**)calloc(numnodes, sizeof(float*));
+	Ainv = (float**)calloc(numnodes, sizeof(float*));
 
 
-	for (int i = 0; i < numdof; i++)
+	for (int i = 0; i < numnodes; i++)
 	{
-		M[i] = (float*)calloc(numdof, sizeof(float));
-		LTL[i] = (float*)calloc(numdof, sizeof(float));
-		A[i] = (float*)calloc(numdof, sizeof(float));
-		Ainv[i] = (float*)calloc(numdof, sizeof(float));
+		M[i] = (float*)calloc(numnodes, sizeof(float));
+		LTL[i] = (float*)calloc(numnodes, sizeof(float));
+		A[i] = (float*)calloc(numnodes, sizeof(float));
+		Ainv[i] = (float*)calloc(numnodes, sizeof(float));
 	}
 
 
@@ -43,25 +43,20 @@ ProjectiveDynamicsSolver::initLaplacian()
 		int i2 = t.node[2];
 		int i3 = t.node[3];
 
+		float tetweight = t.weight * t.volume;
 
-		for (int j = 0; j < 3; j++)
-		{
-			float tetweight = t.weight * t.volume;
+		LTL[i0][i0] += 1 * tetweight;
+		LTL[i1][i1] += 1 * tetweight;
+		LTL[i2][i2] += 1 * tetweight;
+		LTL[i3][i3] += 3 * tetweight;
 
-			LTL[i0 * 3 + j][i0 * 3 + j] += 1 * tetweight;
-			LTL[i1 * 3 + j][i1 * 3 + j] += 1 * tetweight;
-			LTL[i2 * 3 + j][i2 * 3 + j] += 1 * tetweight;
-			LTL[i3 * 3 + j][i3 * 3 + j] += 3 * tetweight;
+		LTL[i0][i3] += -1 * tetweight;
+		LTL[i1][i3] += -1 * tetweight;
+		LTL[i2][i3] += -1 * tetweight;
 
-			LTL[i0 * 3 + j][i3 * 3 + j] += -1 * tetweight;
-			LTL[i1 * 3 + j][i3 * 3 + j] += -1 * tetweight;
-			LTL[i2 * 3 + j][i3 * 3 + j] += -1 * tetweight;
-
-			LTL[i3 * 3 + j][i0 * 3 + j] += -1 * tetweight;
-			LTL[i3 * 3 + j][i1 * 3 + j] += -1 * tetweight;
-			LTL[i3 * 3 + j][i2 * 3 + j] += -1 * tetweight;
-
-		}
+		LTL[i3][i0] += -1 * tetweight;
+		LTL[i3][i1] += -1 * tetweight;
+		LTL[i3][i2] += -1 * tetweight;
 
 	}
 
@@ -73,17 +68,16 @@ ProjectiveDynamicsSolver::initMass()
 	for (int i = 0; i < numnodes; i++)
 	{
 		float mass = tetmesh->getNode(i).mass;
-		M[i * 3][i * 3] = mass;
-		M[i * 3 + 1][i * 3 + 1] = mass;
-		M[i * 3 + 2][i * 3 + 2] = mass;
+		M[i][i] = mass;
+	
 	}
 }
 
 void
 ProjectiveDynamicsSolver::initSystemMatrix()
 {
-	for (int i = 0; i < numdof;i++)
-		for (int j = 0; j < numdof; j++)
+	for (int i = 0; i < numnodes;i++)
+		for (int j = 0; j < numnodes; j++)
 		{
 			A[i][j] = M[i][j] /(DT * DT) + LTL[i][j];
 		}
@@ -98,16 +92,17 @@ ProjectiveDynamicsSolver::init()
 	initMass();
 	initSystemMatrix();
 
-	MatrixOps::InverseMatrix(A, Ainv, numdof);
+	MatrixOps::InverseMatrix(A, Ainv, numnodes);
 
-	//for (int i = 0; i < numdof; i++)
-	//{
-	//	for (int j = 0; j < numdof; j++)
-	//	{
-			//printf("%f ", Ainv[i][j]);
-	//	}
-		//printf("\n");
-	//}
+	for (int i = 0; i < numnodes; i++)
+	{
+		printf("\n");
+		for (int j = 0; j < numnodes; j++)
+		{
+			printf("%f ", A[i][j]);
+		}
+
+	}
 
 	for (int i = 0; i < numdof; i++)
 		v[i] = 0;
@@ -151,6 +146,14 @@ ProjectiveDynamicsSolver::setExtForce(int nodeindex, vector3d force)
 	fext[nodeindex * 3 + 2] = force.z;
 }
 
+void
+ProjectiveDynamicsSolver::addExtForce(int nodeindex, vector3d force)
+{
+	fext[nodeindex * 3] += force.x;
+	fext[nodeindex * 3 + 1] += force.y;
+	fext[nodeindex * 3 + 2] += force.z;
+}
+
 
 void
 ProjectiveDynamicsSolver::timestep()
@@ -158,7 +161,7 @@ ProjectiveDynamicsSolver::timestep()
 	for (int i = 0; i < numdof; i++)
 	{
 		qn[i] = q[i];
-		sn[i] = qn[i] + DT * v[i] * DAMPING + DT * DT * fext[i] / M[i][i];
+		sn[i] = qn[i] + DT * v[i] * DAMPING + DT * DT * fext[i] / M[i/3][i/3];
 		//clear external forces
 		fext[i] = 0;
 		//printf("%f ", sn[i]);
@@ -167,7 +170,7 @@ ProjectiveDynamicsSolver::timestep()
 	for (int n = 0; n < MAX_ITERATIONS; n++)
 	{
 		for (int i = 0; i < numdof; i++)
-			b[i] = M[i][i] / (DT * DT) * sn[i];
+			b[i] = M[i / 3][i / 3] / (DT * DT) * sn[i];
 
 		for (int i = 0; i < numtets; i++)
 		{
@@ -198,13 +201,20 @@ ProjectiveDynamicsSolver::timestep()
 
 		}
 
-		for (int i = 0; i < numdof; i++)
+		for (int i = 0; i < numnodes; i++)
 		{
 			
-			q[i] = 0;
-			for (int j = 0; j < numdof; j++)
-				q[i] += Ainv[i][j] * b[j];
+			q[i * 3] = 0;
+			q[i * 3 + 1] = 0;
+			q[i * 3 + 2] = 0;
 
+			for (int j = 0; j < numnodes; j++)
+			{
+				q[i * 3] += Ainv[i][j] * b[j * 3];
+				q[i * 3 + 1] += Ainv[i][j] * b[j * 3 + 1];
+				q[i * 3 + 2] += Ainv[i][j] * b[j * 3 + 2];
+
+			}
 			//printf("%f ", q[i]);
 		}
 

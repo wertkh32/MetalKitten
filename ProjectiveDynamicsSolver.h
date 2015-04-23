@@ -2,8 +2,8 @@
 #include  "TetMesh.h"
 #include "MatrixOps.h"
 
-#define MAX_ITERATIONS 10
-#define DAMPING 0.98
+#define MAX_ITERATIONS 5
+#define DAMPING 0.975
 
 class ProjectiveDynamicsSolver
 {
@@ -33,6 +33,7 @@ public:
 	void setPosition(int nodeindex, vector3d pos);
 	void setVelocity(int nodeindex, vector3d vel);
 	void setExtForce(int nodeindex, vector3d force);
+	void addExtForce(int nodeindex, vector3d force);
 	void setContrainedNode(int node, bool isConstrained){ constrained[node] = isConstrained; }
 
 	~ProjectiveDynamicsSolver();
