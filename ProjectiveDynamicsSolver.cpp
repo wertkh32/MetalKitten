@@ -29,6 +29,8 @@ ProjectiveDynamicsSolver::ProjectiveDynamicsSolver(TetMesh* _tetmesh) : tetmesh(
 	fext = (float*)calloc(numdof, sizeof(float));
 	b = (float*)calloc(numdof, sizeof(float));
 	constrained = (bool*)calloc(numnodes, sizeof(bool));
+
+	
 }
 
 void
@@ -81,6 +83,7 @@ ProjectiveDynamicsSolver::initSystemMatrix()
 		{
 			A[i][j] = M[i][j] /(DT * DT) + LTL[i][j];
 		}
+		solver.initSparseSolverCompressed3x3(numnodes, A);
 }
 
 
@@ -93,16 +96,22 @@ ProjectiveDynamicsSolver::init()
 	initSystemMatrix();
 
 	MatrixOps::InverseMatrix(A, Ainv, numnodes);
-
+	int count = 0;
 	for (int i = 0; i < numnodes; i++)
 	{
 		printf("\n");
 		for (int j = 0; j < numnodes; j++)
 		{
 			printf("%f ", A[i][j]);
+			if (fabs(A[i][j]) < 1e-9)
+			{
+				count++;
+				//Ainv[i][j] = 0;
+			}
 		}
 
 	}
+	printf("\n%d %d", count,numnodes * numnodes);
 
 	for (int i = 0; i < numdof; i++)
 		v[i] = 0;
@@ -113,6 +122,7 @@ ProjectiveDynamicsSolver::init()
 		qn[i * 3 + 1] = q[i * 3 + 1] = tetmesh->getNode(i).position.y;
 		qn[i * 3 + 2] = q[i * 3 + 2] = tetmesh->getNode(i).position.z;
 	}
+
 
 }
 
@@ -201,7 +211,7 @@ ProjectiveDynamicsSolver::timestep()
 
 		}
 
-		for (int i = 0; i < numnodes; i++)
+		/*for (int i = 0; i < numnodes; i++)
 		{
 			
 			q[i * 3] = 0;
@@ -215,8 +225,13 @@ ProjectiveDynamicsSolver::timestep()
 				q[i * 3 + 2] += Ainv[i][j] * b[j * 3 + 2];
 
 			}
-			//printf("%f ", q[i]);
-		}
+			
+		}*/
+
+
+		solver.solveSparseCompressed3x3(q, b);
+
+
 
 		for (int i=0;i<numnodes;i++)
 		if (constrained[i])

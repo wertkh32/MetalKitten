@@ -1,6 +1,7 @@
 #pragma once
 #include  "TetMesh.h"
 #include "MatrixOps.h"
+#include "ConjugateGradientSolver.h"
 
 #define MAX_ITERATIONS 5
 #define DAMPING 0.975
@@ -18,6 +19,7 @@ class ProjectiveDynamicsSolver
 	float** Ainv;
 	float *qn, *q, *sn, *v, *fext, *b;
 	bool* constrained;
+	ConjugateGradientSolver solver;
 
 	void initLaplacian();
 	void initMass();

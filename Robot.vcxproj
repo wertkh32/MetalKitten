@@ -33,6 +33,7 @@
     <ClCompile Include="quatn.cpp" />
     <ClCompile Include="MetalKitten.cpp" />
     <ClCompile Include="GUIUtils.cpp" />
+    <ClCompile Include="SparseMatrix.cpp" />
     <ClCompile Include="SpatialHash.cpp" />
     <ClCompile Include="TetMesh.cpp" />
     <ClCompile Include="vector3d.cpp" />
@@ -67,6 +68,7 @@
     <ClInclude Include="PolarDecompose.h" />
     <ClInclude Include="ProjectiveDynamicsSolver.h" />
     <ClInclude Include="quatn.h" />
+    <ClInclude Include="SparseMatrix.h" />
     <ClInclude Include="SpatialHash.h" />
     <ClInclude Include="TetMesh.h" />
     <ClInclude Include="vector3d.h" />
@@ -83,7 +85,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -109,9 +111,10 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\RobotRelease\</OutDir>
-    <IntDir>.\RobotRelease\</IntDir>
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\ksing\Desktop\MetalKitten\includes;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -149,6 +152,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies);glut32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\GL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -181,7 +185,7 @@
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Console</SubSystem>
-      <OutputFile>.\RobotRelease\Robot.exe</OutputFile>
+      <OutputFile>.\Release\MetalKitten.exe</OutputFile>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

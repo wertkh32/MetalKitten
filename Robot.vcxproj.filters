@@ -72,6 +72,7 @@
     <ClCompile Include="ProjectiveDynamicsSolver.cpp">
       <Filter>ProjectiveDynamics</Filter>
     </ClCompile>
+    <ClCompile Include="SparseMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -171,6 +172,7 @@
     <ClInclude Include="ProjectiveDynamicsSolver.h">
       <Filter>ProjectiveDynamics</Filter>
     </ClInclude>
+    <ClInclude Include="SparseMatrix.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

@@ -18,10 +18,90 @@ ConjugateGradientSolver::initSolver(int _n, float** _A)
 	tempo = (float*)malloc(sizeof(float) * n);
 }
 
+
+void
+ConjugateGradientSolver::initSparseSolverCompressed3x3(int _n, float** __restrict A)
+{
+	n = _n * 3;
+	SA = new SparseMatrix(A, _n);
+
+	r = (float*)malloc(sizeof(float)* n);
+	d = (float*)malloc(sizeof(float)* n);
+	q = (float*)malloc(sizeof(float)* n);
+	tempo = (float*)malloc(sizeof(float)* n);
+}
+
 void ConjugateGradientSolver::removeRows(int r)
 {
 	for(int i=0;i<n;i++)
 		A[r][i] = 0.0;
+}
+
+
+void
+ConjugateGradientSolver::solveSparseCompressed3x3(float* __restrict x, float* __restrict b)
+{
+	float deltaOld, deltaNew, delta0, alpha, beta;
+	int it;
+
+	for (int i = 0; i<n; i++)
+	{
+		r[i] = 0;
+		d[i] = 0;
+		//x[i]=0;
+		q[i] = 0;
+	}
+
+	SA->mulXCompressed3x3(x, tempo);
+
+	for (int i = 0; i<n; i++)
+	{
+		d[i] = r[i] = b[i] - tempo[i];
+	}
+
+	it = 0;
+	deltaNew = dot(r, r, n);
+	delta0 = deltaNew;
+	alpha = beta = 0;
+
+	while (it < MAX_ITER && deltaNew > EPSILON*EPSILON*delta0)
+	{
+		it++;
+
+		SA->mulXCompressed3x3(d, q);
+
+		alpha = deltaNew / dot(d, q, n);
+
+		for (int i = 0; i < n; i++)
+		{
+			x[i] = x[i] + alpha*d[i];
+		
+			//printf("%f\n", tempo[i]);
+		}
+
+		if (it % 50 == 0)
+		{
+			//refresh r of its horrible floating point errors
+			SA->mulXCompressed3x3(x, tempo);
+			for (int i = 0; i < n; i++)
+				r[i] = b[i] - tempo[i];
+		}
+		else
+		{
+			for (int i = 0; i<n; i++)
+				r[i] = r[i] - alpha * q[i];
+		}
+
+		deltaOld = deltaNew;
+		deltaNew = dot(r, r, n);
+		beta = deltaNew / deltaOld;
+
+		for (int i = 0; i<n; i++)
+			d[i] = r[i] + beta * d[i];
+
+	}
+
+	printf("%d\n", it);
 }
 
 
