@@ -2,35 +2,53 @@
 
 ProjectiveDynamicsGPU::ProjectiveDynamicsGPU(TetMesh* _tetmesh) : tetmesh(_tetmesh)
 {
+	int n = tetmesh->getNumNodes();
+	if(n%16 != 0)
+	{
+		int filler = 16 - n % 16;
+
+		for(int i=0;i<filler;i++)
+			tetmesh->addNode(Node(vector3d(),1));
+	}
+
 	numnodes = tetmesh->getNumNodes();
 	numtets = tetmesh->getNumTets();
 	numdof = numnodes * 3;
 
-
-	M = (float**)calloc(numnodes, sizeof(float*));
-	LTL = (float**)calloc(numnodes, sizeof(float*));
+	//LTL = (float**)calloc(numnodes, sizeof(float*));
 	A = (float**)calloc(numnodes, sizeof(float*));
-	Ainv = (float**)calloc(numnodes, sizeof(float*));
+	//Ainv = (float**)calloc(numnodes, sizeof(float*));
 
 
 	for (int i = 0; i < numnodes; i++)
 	{
-		M[i] = (float*)calloc(numnodes, sizeof(float));
-		LTL[i] = (float*)calloc(numnodes, sizeof(float));
+		//LTL[i] = (float*)calloc(numnodes, sizeof(float));
 		A[i] = (float*)calloc(numnodes, sizeof(float));
-		Ainv[i] = (float*)calloc(numnodes, sizeof(float));
+		//Ainv[i] = (float*)calloc(numnodes, sizeof(float));
+
+		if( A[i] == 0 ) printf(" NO SPACE ");
 	}
 
-
 	qn = (float*)calloc(numdof, sizeof(float));
+	q0 = (float*)calloc(numdof, sizeof(float));
 	q = (float*)calloc(numdof, sizeof(float));
 	v = (float*)calloc(numdof, sizeof(float));
 	sn = (float*)calloc(numdof, sizeof(float));
 	fext = (float*)calloc(numdof, sizeof(float));
 	b = (float*)calloc(numdof, sizeof(float));
-	constrained = (bool*)calloc(numnodes, sizeof(bool));
+	constrained = (char*)calloc(numnodes, sizeof(char));
+	mass = (float*)calloc(numnodes, sizeof(float));
 
+
+	numblockspertet = (numtets / TET_BLOCK_SIZE) + 1;
+	numblockpernode = (numnodes / NODE_BLOCK_SIZE) + 1;
 	
+	tetdata = (TetData*)calloc(numblockspertet,sizeof(TetData));
+	nodedata = (NodeData*)calloc(numblockpernode, sizeof(NodeData));
+	max_entry = -1;
+
+	fext_dirty = false;
+
 }
 
 void
@@ -47,18 +65,18 @@ ProjectiveDynamicsGPU::initLaplacian()
 
 		float tetweight = t.weight * t.volume;
 
-		LTL[i0][i0] += 1 * tetweight;
-		LTL[i1][i1] += 1 * tetweight;
-		LTL[i2][i2] += 1 * tetweight;
-		LTL[i3][i3] += 3 * tetweight;
+		A[i0][i0] += 1 * tetweight;
+		A[i1][i1] += 1 * tetweight;
+		A[i2][i2] += 1 * tetweight;
+		A[i3][i3] += 3 * tetweight;
 
-		LTL[i0][i3] += -1 * tetweight;
-		LTL[i1][i3] += -1 * tetweight;
-		LTL[i2][i3] += -1 * tetweight;
+		A[i0][i3] += -1 * tetweight;
+		A[i1][i3] += -1 * tetweight;
+		A[i2][i3] += -1 * tetweight;
 
-		LTL[i3][i0] += -1 * tetweight;
-		LTL[i3][i1] += -1 * tetweight;
-		LTL[i3][i2] += -1 * tetweight;
+		A[i3][i0] += -1 * tetweight;
+		A[i3][i1] += -1 * tetweight;
+		A[i3][i2] += -1 * tetweight;
 
 	}
 
@@ -69,8 +87,8 @@ ProjectiveDynamicsGPU::initMass()
 {
 	for (int i = 0; i < numnodes; i++)
 	{
-		float mass = tetmesh->getNode(i).mass;
-		M[i][i] = mass;
+		float _mass = tetmesh->getNode(i).mass;
+		mass[i] = _mass;
 	
 	}
 }
@@ -79,10 +97,7 @@ void
 ProjectiveDynamicsGPU::initSystemMatrix()
 {
 	for (int i = 0; i < numnodes;i++)
-		for (int j = 0; j < numnodes; j++)
-		{
-			A[i][j] = M[i][j] /(DT * DT) + LTL[i][j];
-		}
+		A[i][i] += mass[i] / (DT * DT);
 		
 }
 
@@ -94,50 +109,102 @@ ProjectiveDynamicsGPU::init()
 	initLaplacian();
 	initMass();
 	initSystemMatrix();
-	solver.initSparseSolverCompressed3x3(numnodes, A);
 
-	//MatrixOps::InverseMatrix(A, Ainv, numnodes);
 	int count = 0;
+	max_entry = -1;
+
+	//generate entries
 	for (int i = 0; i < numnodes; i++)
 	{
-		//printf("\n");
+		int blockid = i / NODE_BLOCK_SIZE;
+		int ltid = i % NODE_BLOCK_SIZE;
+
+		int rowcount = 0;
+		
 		for (int j = 0; j < numnodes; j++)
 		{
-			//printf("%f ", A[i][j]);
-			if (fabs(A[i][j]) < 1e-9)
+			if (fabs(A[i][j]) >= 1e-9)
 			{
-				count++;
+				nodedata[blockid].nodeEntries[rowcount][ltid] = A[i][j];
+				nodedata[blockid].nodeEntryIndex[rowcount][ltid] = j;
+				rowcount++;
 
-				//Ainv[i][j] = 0;
 			}
+			else
+				count++;
+		}
+		max_entry = MAX(max_entry,rowcount);
+
+		int tetcount = 0;
+		for(int j=0;j<numtets;j++)
+		{
+			for(int k=0;k<4;k++)
+				if(tetmesh->getTet(j).node[k] == i)
+				{
+					nodedata[blockid].indices[tetcount][TET_INDEX][ltid] = j;
+					nodedata[blockid].indices[tetcount][NODE_INDEX][ltid] = k;
+					tetcount++;
+				}
 		}
 
+		nodedata[blockid].ntets[ltid] = tetcount;
+
 	}
-	printf("\n%d %d", count,numnodes * numnodes);
+	printf("\n%d %d %d", count,numnodes * numnodes, max_entry);
+
+
+	for (int i = 0; i < numtets; i++)
+	{
+		int blockid = i / TET_BLOCK_SIZE;
+		int ltid = i % TET_BLOCK_SIZE;
+
+		TetData& td = tetdata[blockid];
+		Tet& t = tetmesh->getTet(i);
+
+		for(int j=0;j<3;j++)
+			for(int k=0;k<3;k++)
+			{
+				td.Dm[j][k][ltid] = t.Dm(j,k);
+				td.Bm[j][k][ltid] = t.Bm(j,k);
+			}
+
+			td.index[0][ltid] = t.node[0];
+			td.index[1][ltid] = t.node[1];
+			td.index[2][ltid] = t.node[2];
+			td.index[3][ltid] = t.node[3];
+
+			td.weight[ltid] = t.weight * t.volume;
+	}
 
 	for (int i = 0; i < numdof; i++)
 		v[i] = 0;
 
 	for (int i = 0; i < numnodes; i++)
 	{
-		qn[i * 3] = q[i * 3] = tetmesh->getNode(i).position.x;
-		qn[i * 3 + 1] = q[i * 3 + 1] = tetmesh->getNode(i).position.y;
-		qn[i * 3 + 2] = q[i * 3 + 2] = tetmesh->getNode(i).position.z;
+		qn[i] = q[i] = tetmesh->getNode(i).position.x;
+		qn[i + numnodes] = q[i + numnodes] = tetmesh->getNode(i).position.y;
+		qn[i + numnodes * 2] = q[i + numnodes * 2] = tetmesh->getNode(i).position.z;
+
+		q0[i] =  tetmesh->getRestPosition(i).x;
+		q0[i + numnodes] =  tetmesh->getRestPosition(i).y;
+		q0[i + numnodes * 2] =  tetmesh->getRestPosition(i).z;
 	}
 
 
+	gpuInitVars(numtets, numnodes);
+	gpuUploadVars(tetdata, nodedata, q, q0, v, fext, mass, constrained, numnodes, numtets);
 }
 
 void
 ProjectiveDynamicsGPU::setPosition(int nodeindex, vector3d pos)
 {
-	q[nodeindex * 3] = pos.x;
-	q[nodeindex * 3 + 1] = pos.y;
-	q[nodeindex * 3 + 2] = pos.z;
+	q[nodeindex] = pos.x;
+	q[nodeindex  + numnodes] = pos.y;
+	q[nodeindex  + numnodes * 2] = pos.z;
 
-	qn[nodeindex * 3] = pos.x;
-	qn[nodeindex * 3 + 1] = pos.y;
-	qn[nodeindex * 3 + 2] = pos.z;
+	qn[nodeindex] = pos.x;
+	qn[nodeindex + numnodes] = pos.y;
+	qn[nodeindex  + numnodes * 2] = pos.z;
 
 	tetmesh->getNode(nodeindex).position = pos;
 }
@@ -145,118 +212,56 @@ ProjectiveDynamicsGPU::setPosition(int nodeindex, vector3d pos)
 void
 ProjectiveDynamicsGPU::setVelocity(int nodeindex, vector3d vel)
 {
-	v[nodeindex * 3] = vel.x;
-	v[nodeindex * 3 + 1] = vel.y;
-	v[nodeindex * 3 + 2] = vel.z;
+	v[nodeindex] = vel.x;
+	v[nodeindex + numnodes] = vel.y;
+	v[nodeindex + numnodes * 2] = vel.z;
 
 }
 void
 ProjectiveDynamicsGPU::setExtForce(int nodeindex, vector3d force)
 {
-	fext[nodeindex * 3] = force.x;
-	fext[nodeindex * 3 + 1] = force.y;
-	fext[nodeindex * 3 + 2] = force.z;
+	fext_dirty = true;
+
+	fext[nodeindex] = force.x;
+	fext[nodeindex + numnodes] = force.y;
+	fext[nodeindex + numnodes * 2] = force.z;
 }
 
 void
 ProjectiveDynamicsGPU::addExtForce(int nodeindex, vector3d force)
 {
-	fext[nodeindex * 3] += force.x;
-	fext[nodeindex * 3 + 1] += force.y;
-	fext[nodeindex * 3 + 2] += force.z;
+	fext_dirty = true;
+
+	fext[nodeindex] += force.x;
+	fext[nodeindex + numnodes] += force.y;
+	fext[nodeindex + numnodes * 2] += force.z;
 }
 
 
 void
 ProjectiveDynamicsGPU::timestep()
 {
-	for (int i = 0; i < numdof; i++)
-	{
-		qn[i] = q[i];
-		sn[i] = qn[i] + DT * v[i] * DAMPING + DT * DT * fext[i] / M[i/3][i/3];
-		//clear external forces
-		fext[i] = 0;
-		//printf("%f ", sn[i]);
-	}
+	if(fext_dirty)
+		gpuUploadExtForces(fext, numnodes);
 
-	for (int n = 0; n < MAX_ITERATIONS; n++)
-	{
-		for (int i = 0; i < numdof; i++)
-			b[i] = M[i / 3][i / 3] / (DT * DT) * sn[i];
+	GPUTimestep(numtets, numnodes, max_entry);
 
-		for (int i = 0; i < numtets; i++)
-		{
-			Tet& t = tetmesh->getTet(i);
-
-			int i0 = t.node[0];
-			int i1 = t.node[1];
-			int i2 = t.node[2];
-			int i3 = t.node[3];
-
-			vector3d v0(q[i0 * 3], q[i0 * 3 + 1], q[i0 * 3 + 2]);
-			vector3d v1(q[i1 * 3], q[i1 * 3 + 1], q[i1 * 3 + 2]);
-			vector3d v2(q[i2 * 3], q[i2 * 3 + 1], q[i2 * 3 + 2]);
-			vector3d v3(q[i3 * 3], q[i3 * 3 + 1], q[i3 * 3 + 2]);
-
-
-			Matrix3d R = tetmesh->getRotation(i, tetmesh->generateD(v0,v1,v2,v3));
-
-			Matrix3d edges = R * t.Dm * t.weight * t.volume;
-
-			for (int j=0; j < 3; j++)
-			{
-				b[i0 * 3 + j] += edges(j, 0);
-				b[i1 * 3 + j] += edges(j, 1);
-				b[i2 * 3 + j] += edges(j, 2);
-				b[i3 * 3 + j] += -edges(j, 0) - edges(j, 1) - edges(j, 2);
-			}
-
-		}
-
-		/*for (int i = 0; i < numnodes; i++)
-		{
-			
-			q[i * 3] = 0;
-			q[i * 3 + 1] = 0;
-			q[i * 3 + 2] = 0;
-
-			for (int j = 0; j < numnodes; j++)
-			{
-				q[i * 3] += Ainv[i][j] * b[j * 3];
-				q[i * 3 + 1] += Ainv[i][j] * b[j * 3 + 1];
-				q[i * 3 + 2] += Ainv[i][j] * b[j * 3 + 2];
-
-			}
-			
-		}*/
-
-
-		solver.solveSparseCompressed3x3(q, b);
-
-
-
-		for (int i=0;i<numnodes;i++)
-		if (constrained[i])
-		{
-			setPosition(i, tetmesh->getRestPosition(i));
-		}
-
-		//to be continued
-	}
-
-	for (int i = 0; i < numdof; i++)
-	{
-		v[i] = (q[i] - qn[i]) / DT;
-	}
-
+	gpuDownloadVars(q, numnodes);
 
 	for (int i = 0; i < numnodes; i++)
 	{
-		tetmesh->getNode(i).position = vector3d(q[i * 3], q[i * 3 + 1], q[i * 3 + 2]);
+		tetmesh->getNode(i).position = vector3d(q[i], q[i + numnodes], q[i  + numnodes * 2]);
+
+		fext[i] = 0;
+		fext[i + numnodes] = 0;
+		fext[i + numnodes * 2] = 0;
 	}
+
+	fext_dirty = false;
 }
 
 
 ProjectiveDynamicsGPU::~ProjectiveDynamicsGPU()
 {
+	gpuDestroyVars();
 }

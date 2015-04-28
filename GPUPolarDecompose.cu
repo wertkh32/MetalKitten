@@ -1,5 +1,5 @@
 #pragma once
-#define TOLERANCE 0.01
+#define TOLERANCE 0.05
 
 __device__ 
 float oneNorm(const float A[3][3])

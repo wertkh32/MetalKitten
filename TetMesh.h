@@ -4,8 +4,8 @@
 #include "PolarDecompose.h"
 #include "Matrix3d.h"
 
-#define MAX_NODES 10000
-#define MAX_TETS 10000
+#define MAX_NODES 100000
+#define MAX_TETS 100000
 
 
 struct Tet
@@ -14,8 +14,9 @@ struct Tet
 	float weight;
 	float volume;
 	Matrix3d Dm;
+	Matrix3d Bm;
 	Tet(){};
-	Tet(int _n1, int _n2, int _n3, int _n4, float _weight, float _volume, Matrix3d& _Dm) : Dm(_Dm)
+	Tet(int _n1, int _n2, int _n3, int _n4, float _weight, float _volume, Matrix3d& _Dm) : Dm(_Dm), Bm(_Dm.inverse())
 	{
 		weight = _weight;
 		volume = _volume;

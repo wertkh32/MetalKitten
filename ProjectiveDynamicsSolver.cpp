@@ -180,7 +180,7 @@ ProjectiveDynamicsSolver::timestep()
 		sn[i] = qn[i] + DT * v[i] * DAMPING + DT * DT * fext[i] / M[i/3][i/3];
 		//clear external forces
 		fext[i] = 0;
-		//printf("%f ", sn[i]);
+		//printf("%f\n", M[i / 3][i / 3] / (DT * DT) * sn[i]);
 	}
 
 	for (int n = 0; n < MAX_ITERATIONS; n++)
@@ -216,6 +216,14 @@ ProjectiveDynamicsSolver::timestep()
 			}
 
 		}
+
+
+		//for (int i = 0; i < numdof; i++)
+		//{
+		//	printf("%f\n", b[i]);
+		//}
+
+		//system("pause");
 
 		/*for (int i = 0; i < numnodes; i++)
 		{

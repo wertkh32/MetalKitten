@@ -27,9 +27,9 @@ TetMesh::getRotation(int tetindex, Matrix3d& Ds)
 {
 	Tet& t = tets[tetindex];
 
-	Matrix3d DmInv = t.Dm.inverse();
+	
 
-	Matrix3d F = Ds * DmInv;
+	Matrix3d F = Ds * t.Bm;
 	Matrix3d R, S;
 
 	PolarDecompose::compute(F, R, S);

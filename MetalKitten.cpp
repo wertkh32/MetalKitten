@@ -11,8 +11,12 @@
 #include "MassSpringMesh.h"
 #include "MassSpringIntegrator.h"
 #include "ProjectiveDynamicsSolver.h"
+#include "ProjectiveDyamicsGPU.h"
+#include "perfmon.h"
 
 #include "Collision.h"
+
+#define PDSOLVER ProjectiveDynamicsGPU
 
 static int shoulder = 0, elbow = 0;
 GUIUtils gui;
@@ -30,9 +34,9 @@ MassSpringMesh mesh;
 MassSpringIntegrator inte(&mesh);
 
 TetMesh tetmesh;
-ProjectiveDynamicsSolver* psolver;
+PDSOLVER* psolver;
 
-#define DIM 5
+#define DIM 100
 
 
 void lettherebelight(){
@@ -89,9 +93,11 @@ void init(void)
 
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-   lettherebelight();
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_NORMAL_ARRAY);
+   
+	
+	lettherebelight();
 }
 
 void drawfloor(){
@@ -127,7 +133,16 @@ void display(void)
 			  // inte.timeStep();
 			   for (int i = 0; i < tetmesh.getNumNodes(); i++)
 					psolver->addExtForce(i, vector3d(0, -9.81 * tetmesh.getNode(i).mass, 0));
-			   psolver->timestep();
+			   
+			   perfmon p;
+			   p.startTimer();
+				 psolver->timestep();
+				p.stopTimer();
+				p.print();
+			   
+			   
+			   
+			  
 			   //start = !start;
 		   }
 
@@ -139,7 +154,7 @@ void display(void)
 			  // mesh.render();
 			  // inte.collider.render();
 
-		   drawfloor();
+		   //drawfloor();
 		   gui.renderCursor();
    glPopMatrix();
 
@@ -154,7 +169,7 @@ void reshape (int w, int h)
    glViewport (0, 0, (GLsizei) w, (GLsizei) h); 
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity ();
-   gluPerspective(75.0, (GLfloat) w/(GLfloat) h, 1.0, 50.0);
+   gluPerspective(75.0, (GLfloat) w/(GLfloat) h, 1.0, 200.0);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
   // glTranslatef (0.0, 0.0, -8.0);
@@ -352,7 +367,12 @@ void initTetMesh()
 		
 	}
 
-	psolver = new ProjectiveDynamicsSolver(&tetmesh);
+	int ghostnodes = tetmesh.getNumNodes() % 16;
+
+	//for(int i=0;i<ghostnodes;i++)
+	//	tetmesh.addNode( Node(vector3d(0, 0, 0), 1) );
+
+	psolver = new PDSOLVER(&tetmesh);
 	
 	for (int i = 0; i<DIM + 1; i++)
 		psolver->setContrainedNode(i,true);
