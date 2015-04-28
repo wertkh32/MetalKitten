@@ -1,4 +1,5 @@
 #pragma once
+#include "PDGPUKernel.cuh"
 #include  "TetMesh.h"
 #include "MatrixOps.h"
 #include "ConjugateGradientSolver.h"
@@ -6,7 +7,7 @@
 #define MAX_ITERATIONS 5
 #define DAMPING 0.98
 
-class ProjectiveDynamicsSolver
+class ProjectiveDynamicsGPU
 {
 	TetMesh* tetmesh;
 	int numnodes;
@@ -27,7 +28,7 @@ class ProjectiveDynamicsSolver
 
 
 public:
-	ProjectiveDynamicsSolver(TetMesh* _tetmesh);
+	ProjectiveDynamicsGPU(TetMesh* _tetmesh);
 
 	void init();
 	void timestep();
@@ -38,6 +39,6 @@ public:
 	void addExtForce(int nodeindex, vector3d force);
 	void setContrainedNode(int node, bool isConstrained){ constrained[node] = isConstrained; }
 
-	~ProjectiveDynamicsSolver();
+	~ProjectiveDynamicsGPU();
 };
 

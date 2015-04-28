@@ -32,7 +32,7 @@ MassSpringIntegrator inte(&mesh);
 TetMesh tetmesh;
 ProjectiveDynamicsSolver* psolver;
 
-#define DIM 10
+#define DIM 5
 
 
 void lettherebelight(){
@@ -200,10 +200,10 @@ void keyboard (unsigned char key, int x, int y)
 			  int start2 = end2 - (DIM + 1) - 1;
 
 			  for (int i = start; i<end; i++)
-				  psolver->setExtForce(i, vector3d(0, 100, 0));
+				  psolver->setExtForce(i, vector3d(0, 1000, 0));
 
 			  for (int i = start2; i<end2 ; i++)
-				  psolver->setExtForce(i, vector3d(0, 100, 0));
+				  psolver->setExtForce(i, vector3d(0, 1000, 0));
 
 			 
 		  }

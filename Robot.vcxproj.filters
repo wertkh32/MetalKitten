@@ -73,6 +73,9 @@
       <Filter>ProjectiveDynamics</Filter>
     </ClCompile>
     <ClCompile Include="SparseMatrix.cpp" />
+    <ClCompile Include="ProjectiveDyamicsGPU.cpp">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="quatn.h">
@@ -173,6 +176,9 @@
       <Filter>ProjectiveDynamics</Filter>
     </ClInclude>
     <ClInclude Include="SparseMatrix.h" />
+    <ClInclude Include="ProjectiveDyamicsGPU.h">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -208,5 +214,24 @@
     <Filter Include="ProjectiveDynamics">
       <UniqueIdentifier>{36e520d9-d1fc-4230-b732-e1aee823de47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProjectiveDynamics\GPU">
+      <UniqueIdentifier>{0ca53700-d8e8-4815-a108-a4cdd14c8241}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="PDGPUKernel.cu">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GPUDataStructs.cuh">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </None>
+    <None Include="PDGPUKernel.cuh">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </None>
+    <None Include="GPUPolarDecompose.cu">
+      <Filter>ProjectiveDynamics\GPU</Filter>
+    </None>
   </ItemGroup>
 </Project>

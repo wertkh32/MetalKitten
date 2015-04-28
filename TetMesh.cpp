@@ -34,6 +34,11 @@ TetMesh::getRotation(int tetindex, Matrix3d& Ds)
 
 	PolarDecompose::compute(F, R, S);
 
+	if(R.determinant() < 0)
+		R = Matrix3d(-1, 0, 0,
+					 0, -1, 0,
+					 0, 0, -1) * R;
+
 	return R;
 }
 

@@ -4,8 +4,8 @@
 #include "PolarDecompose.h"
 #include "Matrix3d.h"
 
-#define MAX_NODES 1000
-#define MAX_TETS 1000
+#define MAX_NODES 10000
+#define MAX_TETS 10000
 
 
 struct Tet

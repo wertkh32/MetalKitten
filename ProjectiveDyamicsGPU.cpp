@@ -1,6 +1,6 @@
-#include "ProjectiveDynamicsSolver.h"
+#include "ProjectiveDyamicsGPU.h"
 
-ProjectiveDynamicsSolver::ProjectiveDynamicsSolver(TetMesh* _tetmesh) : tetmesh(_tetmesh)
+ProjectiveDynamicsGPU::ProjectiveDynamicsGPU(TetMesh* _tetmesh) : tetmesh(_tetmesh)
 {
 	numnodes = tetmesh->getNumNodes();
 	numtets = tetmesh->getNumTets();
@@ -34,7 +34,7 @@ ProjectiveDynamicsSolver::ProjectiveDynamicsSolver(TetMesh* _tetmesh) : tetmesh(
 }
 
 void
-ProjectiveDynamicsSolver::initLaplacian()
+ProjectiveDynamicsGPU::initLaplacian()
 {
 	for (int i = 0; i < numtets; i++)
 	{
@@ -65,7 +65,7 @@ ProjectiveDynamicsSolver::initLaplacian()
 }
 
 void
-ProjectiveDynamicsSolver::initMass()
+ProjectiveDynamicsGPU::initMass()
 {
 	for (int i = 0; i < numnodes; i++)
 	{
@@ -76,7 +76,7 @@ ProjectiveDynamicsSolver::initMass()
 }
 
 void
-ProjectiveDynamicsSolver::initSystemMatrix()
+ProjectiveDynamicsGPU::initSystemMatrix()
 {
 	for (int i = 0; i < numnodes;i++)
 		for (int j = 0; j < numnodes; j++)
@@ -89,7 +89,7 @@ ProjectiveDynamicsSolver::initSystemMatrix()
 
 
 void
-ProjectiveDynamicsSolver::init()
+ProjectiveDynamicsGPU::init()
 {
 	initLaplacian();
 	initMass();
@@ -100,7 +100,6 @@ ProjectiveDynamicsSolver::init()
 	int count = 0;
 	for (int i = 0; i < numnodes; i++)
 	{
-		int rowcount = 0;
 		//printf("\n");
 		for (int j = 0; j < numnodes; j++)
 		{
@@ -108,13 +107,10 @@ ProjectiveDynamicsSolver::init()
 			if (fabs(A[i][j]) < 1e-9)
 			{
 				count++;
+
 				//Ainv[i][j] = 0;
 			}
-			else
-				rowcount++;
 		}
-
-		printf("row count %d: %d\n",i,rowcount);
 
 	}
 	printf("\n%d %d", count,numnodes * numnodes);
@@ -133,7 +129,7 @@ ProjectiveDynamicsSolver::init()
 }
 
 void
-ProjectiveDynamicsSolver::setPosition(int nodeindex, vector3d pos)
+ProjectiveDynamicsGPU::setPosition(int nodeindex, vector3d pos)
 {
 	q[nodeindex * 3] = pos.x;
 	q[nodeindex * 3 + 1] = pos.y;
@@ -147,7 +143,7 @@ ProjectiveDynamicsSolver::setPosition(int nodeindex, vector3d pos)
 }
 
 void
-ProjectiveDynamicsSolver::setVelocity(int nodeindex, vector3d vel)
+ProjectiveDynamicsGPU::setVelocity(int nodeindex, vector3d vel)
 {
 	v[nodeindex * 3] = vel.x;
 	v[nodeindex * 3 + 1] = vel.y;
@@ -155,7 +151,7 @@ ProjectiveDynamicsSolver::setVelocity(int nodeindex, vector3d vel)
 
 }
 void
-ProjectiveDynamicsSolver::setExtForce(int nodeindex, vector3d force)
+ProjectiveDynamicsGPU::setExtForce(int nodeindex, vector3d force)
 {
 	fext[nodeindex * 3] = force.x;
 	fext[nodeindex * 3 + 1] = force.y;
@@ -163,7 +159,7 @@ ProjectiveDynamicsSolver::setExtForce(int nodeindex, vector3d force)
 }
 
 void
-ProjectiveDynamicsSolver::addExtForce(int nodeindex, vector3d force)
+ProjectiveDynamicsGPU::addExtForce(int nodeindex, vector3d force)
 {
 	fext[nodeindex * 3] += force.x;
 	fext[nodeindex * 3 + 1] += force.y;
@@ -172,7 +168,7 @@ ProjectiveDynamicsSolver::addExtForce(int nodeindex, vector3d force)
 
 
 void
-ProjectiveDynamicsSolver::timestep()
+ProjectiveDynamicsGPU::timestep()
 {
 	for (int i = 0; i < numdof; i++)
 	{
@@ -261,6 +257,6 @@ ProjectiveDynamicsSolver::timestep()
 }
 
 
-ProjectiveDynamicsSolver::~ProjectiveDynamicsSolver()
+ProjectiveDynamicsGPU::~ProjectiveDynamicsGPU()
 {
 }
