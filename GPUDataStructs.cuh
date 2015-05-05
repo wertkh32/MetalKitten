@@ -4,6 +4,10 @@
 #define TET_BLOCK_SIZE 64
 #define DOT_BLOCK_SIZE 512	
 
+#define HWARP_SIZE 16
+#define TET_NUM_HWARPS 4
+#define TET_PER_HWARP 16
+
 #define VECTOR_BLOCK_SIZE 128
 
 #define MAX_NODE_ENTRIES 64
@@ -11,6 +15,12 @@
 
 #define TET_INDEX 0 
 #define NODE_INDEX 1
+
+//total 64 tets or TET_NUM_HWARPS * TET_PER_HWARP
+struct WarpData
+{
+	float P[TET_PER_HWARP][TET_NUM_HWARPS][HWARP_SIZE];
+};
 
 struct NodeData
 {

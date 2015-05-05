@@ -163,6 +163,33 @@ gpuDestroyVars()
 
 
 //ref function
+__device__
+void readWarpCoalescedMemory(WarpData* data, int node, float out[16])
+{
+	int warpthreadid = threadIdx.x % HWARP_SIZE;
+	int warpdata_tid = (node % (TET_NUM_HWARPS * TET_PER_HWARP));
+	int warpdata_bid = (node / (TET_NUM_HWARPS * TET_PER_HWARP));
+	int warpdata_wid = warpdata_tid % TET_NUM_HWARPS;
+	int warpdata_lid = warpdata_tid / TET_NUM_HWARPS;
+
+	out[warpthreadid] = data[warpdata_bid].P[warpdata_lid][warpdata_wid][warpthreadid];
+}
+
+//ref function
+__device__
+void writeWarpCoalescedMemory(WarpData* data, int node, float out[16])
+{
+	int warpthreadid = threadIdx.x % HWARP_SIZE;
+	int warpdata_tid = (node % (TET_NUM_HWARPS * TET_PER_HWARP));
+	int warpdata_bid = (node / (TET_NUM_HWARPS * TET_PER_HWARP));
+	int warpdata_wid = warpdata_tid % TET_NUM_HWARPS;
+	int warpdata_lid = warpdata_tid / TET_NUM_HWARPS;
+
+	data[warpdata_bid].P[warpdata_lid][warpdata_wid][warpthreadid] = out[warpthreadid];
+}
+
+
+//ref function
 // (numnodes / NODE_BLOCK_SIZE) + 1 blocks
 __global__
 void PDCompressed3x3MatrixMultiply(NodeData* nodedata, float* in, float* out, int max_entry, int numnodes)
@@ -590,39 +617,39 @@ void GPUTimestep(int numtets, int numnodes, int max_entry)
 	
 	MakeSnAndV<<<num_blocks_vec, VECTOR_BLOCK_SIZE>>>(gpuptr_sn, gpuptr_x, gpuptr_xt, gpuptr_vt, gpuptr_fext, gpuptr_mass, numnodes);
 
-	checkCudaErrors("Make Sn, V");
+	//checkCudaErrors("Make Sn, V");
 
 	for(int i=0;i<PD_ITERATIONS;i++)
 	{
 		ProjectTransforms<<<num_blocks_tet, TET_BLOCK_SIZE>>>(gpuptr_TetData, gpuptr_x, numtets, numnodes);
 
-		checkCudaErrors("Project Transforms");
+		//checkCudaErrors("Project Transforms");
 
 		makeBandRandD<<<num_blocks_node, NODE_BLOCK_SIZE>>>(gpuptr_TetData, gpuptr_NodeData, gpuptr_sn, gpuptr_b, numnodes);
 
-		checkCudaErrors("B, R, D");
+		//checkCudaErrors("B, R, D");
 
 		makeRandD<<<num_blocks_node, NODE_BLOCK_SIZE>>>(gpuptr_NodeData, gpuptr_b, gpuptr_x, gpuptr_CG_R, gpuptr_CG_D,max_entry, numnodes);
 
-		checkCudaErrors("R, D");
+		//checkCudaErrors("R, D");
 
 		initDeltaVars<<<1, DOT_BLOCK_SIZE>>>(gpuptr_CG_Vars, gpuptr_CG_R, numnodes);
 
-		checkCudaErrors("init CG Vars");
+		//checkCudaErrors("init CG Vars");
 
 		for(int j=0;j<CG_ITERATIONS;j++)
 		{
 			MakeQ<<<num_blocks_node, NODE_BLOCK_SIZE>>>(gpuptr_NodeData, gpuptr_CG_D, gpuptr_CG_Q, max_entry, numnodes);
 
-			checkCudaErrors("q = Ad");
+			//checkCudaErrors("q = Ad");
 
 			makeVars<<<1, DOT_BLOCK_SIZE>>>(gpuptr_CG_Vars, gpuptr_CG_D, gpuptr_CG_Q, gpuptr_CG_R, numnodes);
 
-			checkCudaErrors("make CG vars");
+			//checkCudaErrors("make CG vars");
 
 			makeXRandD<<<num_blocks_vec, VECTOR_BLOCK_SIZE>>>(gpuptr_CG_Vars, gpuptr_x, gpuptr_CG_R, gpuptr_CG_D, gpuptr_CG_Q, numnodes);
 
-			checkCudaErrors("X, R, D");
+			//checkCudaErrors("X, R, D");
 		}
 
 		constrainNodes<<<num_blocks_vec, VECTOR_BLOCK_SIZE>>>(gpuptr_x, gpuptr_x0, gpuptr_allowed, numnodes);
